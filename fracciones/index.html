@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chef de Fracciones · Aprendé fracciones jugando</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="confettiLayer" class="confetti-layer" aria-hidden="true"></div>
+
+<header class="app-header">
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-icon" aria-hidden="true">🍕</span>
+      <div class="logo-text">
+        <h1>Chef de Fracciones</h1>
+        <p>Tu aventura en la pizzería para dominar las fracciones</p>
+      </div>
+    </div>
+    <div class="header-stats">
+      <div class="stat-stars" aria-label="Estrellas ganadas">
+        <span class="star-icon" aria-hidden="true">⭐</span>
+        <span id="starsCount">0</span>
+      </div>
+      <div class="progress-wrap" title="Tu progreso total">
+        <div class="progress-ring" id="progressRing">
+          <span id="progressEmoji">🍕</span>
+        </div>
+        <div class="progress-text">
+          <strong id="progressPercent">0%</strong>
+          <span>del recetario</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <nav class="app-nav" id="appNav" aria-label="Secciones de la app">
+    <button class="nav-btn active" data-section="inicio">🏠 Inicio</button>
+    <button class="nav-btn" data-section="aprender">📖 Aprender</button>
+    <button class="nav-btn" data-section="mision1">🔎 Misión 1</button>
+    <button class="nav-btn" data-section="mision2">🎨 Misión 2</button>
+    <button class="nav-btn" data-section="mision3">🧾 Misión 3</button>
+    <button class="nav-btn" data-section="insignias">🏅 Insignias</button>
+  </nav>
+</header>
+
+<main id="main">
+
+  <!-- INICIO -->
+  <section id="sec-inicio" class="section active">
+    <div class="hero">
+      <div class="hero-text">
+        <span class="eyebrow">¡Bienvenido, aprendiz de chef!</span>
+        <h2>En esta pizzería, cada porción es una fracción</h2>
+        <p>Vas a aprender qué son las fracciones, a representarlas cortando pizzas y a resolver los pedidos de tus clientes. Sumá estrellas, completá misiones y ganá insignias de chef.</p>
+        <button class="btn-primary" id="btnEmpezar">Empezar la aventura 🚀</button>
+      </div>
+      <div class="hero-art" id="heroArt" aria-hidden="true"></div>
+    </div>
+
+    <div class="mission-cards">
+      <article class="mission-card">
+        <span class="mission-card-icon">📖</span>
+        <h3>Aprender</h3>
+        <p>Descubrí qué es el numerador y el denominador jugando con una pizza.</p>
+      </article>
+      <article class="mission-card">
+        <span class="mission-card-icon">🔎</span>
+        <h3>Misión 1</h3>
+        <p>Reconocé fracciones mirando pizzas ya cortadas.</p>
+      </article>
+      <article class="mission-card">
+        <span class="mission-card-icon">🎨</span>
+        <h3>Misión 2</h3>
+        <p>Cortá y pintá porciones para representar una fracción.</p>
+      </article>
+      <article class="mission-card">
+        <span class="mission-card-icon">🧾</span>
+        <h3>Misión 3</h3>
+        <p>Resolvé pedidos de la pizzería usando fracciones.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- APRENDER -->
+  <section id="sec-aprender" class="section">
+    <h2 class="section-title">📖 ¿Qué es una fracción?</h2>
+    <p class="section-intro">Una fracción representa una parte de un todo. Se escribe con dos números separados por una rayita.</p>
+
+    <div class="fraction-explainer">
+      <div class="fraction-big" id="fractionBig">
+        <span class="frac-num" id="fracNumBig">0</span>
+        <span class="frac-line"></span>
+        <span class="frac-den" id="fracDenBig">4</span>
+      </div>
+      <div class="fraction-labels">
+        <p><strong>Numerador</strong> (arriba): cuántas porciones tomamos.</p>
+        <p><strong>Denominador</strong> (abajo): en cuántas porciones se dividió la pizza entera.</p>
+      </div>
+    </div>
+
+    <div class="learn-interactive">
+      <div class="pizza-stage" id="learnPizzaStage"></div>
+      <div class="learn-controls">
+        <p class="control-label">¿En cuántas porciones cortamos la pizza?</p>
+        <div class="chip-row" id="denChooser">
+          <button class="chip" data-den="4">4</button>
+          <button class="chip active" data-den="6">6</button>
+          <button class="chip" data-den="8">8</button>
+        </div>
+        <p class="control-label">¿Cuántas porciones te comiste?</p>
+        <input type="range" id="numSlider" min="0" max="6" value="0" step="1">
+        <p class="learn-readout" id="learnReadout">Te comiste <strong>0</strong> de <strong>6</strong> porciones.</p>
+      </div>
+    </div>
+
+    <button class="btn-primary" id="btnIrMision1">Ir a la Misión 1 →</button>
+  </section>
+
+  <!-- MISION 1 -->
+  <section id="sec-mision1" class="section">
+    <h2 class="section-title">🔎 Misión 1 · Reconocé la fracción</h2>
+    <p class="section-intro">Mirá cada pizza y respondé la pregunta del cliente.</p>
+    <div class="mission-progress" id="m1Progress"></div>
+    <div id="m1Content" class="mission-content"></div>
+  </section>
+
+  <!-- MISION 2 -->
+  <section id="sec-mision2" class="section">
+    <h2 class="section-title">🎨 Misión 2 · Armá la fracción</h2>
+    <p class="section-intro">Tocá las porciones para pintarlas con queso hasta representar la fracción pedida.</p>
+    <div class="mission-progress" id="m2Progress"></div>
+    <div id="m2Content" class="mission-content"></div>
+  </section>
+
+  <!-- MISION 3 -->
+  <section id="sec-mision3" class="section">
+    <h2 class="section-title">🧾 Misión 3 · Resolvé los pedidos</h2>
+    <p class="section-intro">Tus clientes tienen problemas para resolver. ¡Ayudalos usando fracciones!</p>
+    <div class="mission-progress" id="m3Progress"></div>
+    <div id="m3Content" class="mission-content"></div>
+  </section>
+
+  <!-- INSIGNIAS -->
+  <section id="sec-insignias" class="section">
+    <h2 class="section-title">🏅 Mis insignias de chef</h2>
+    <p class="section-intro">Completá las misiones para desbloquear cada insignia.</p>
+    <div class="badges-grid" id="badgesGrid"></div>
+  </section>
+
+</main>
+
+<footer class="app-footer">
+  <p>Hecho con 🍕 para chefs de 4° grado</p>
+</footer>
+
+<div id="badgeModal" class="modal hidden" role="dialog" aria-modal="true">
+  <div class="modal-card">
+    <div class="modal-badge" id="modalBadgeIcon">🏅</div>
+    <span class="modal-eyebrow">¡Nueva insignia!</span>
+    <h2 id="modalBadgeTitle">Insignia</h2>
+    <p id="modalBadgeDesc">Descripción</p>
+    <button id="modalCloseBtn" class="btn-primary">¡Genial!</button>
+  </div>
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>
