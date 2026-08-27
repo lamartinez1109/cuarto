@@ -25,7 +25,7 @@ const SUBJECTS = [
     title: 'Actividades de Lengua',
     desc: 'La noticia.',
     href: 'noticia/index.html',
-    available: false,
+    available: true,
   },
      {
     id: 'lengua',
