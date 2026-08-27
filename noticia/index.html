@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¡Al Ataque, Reporteros! · La noticia y sus partes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@500;600;700&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ================= CARNET DE REPORTERO (cabecera fija) ================= -->
+<header class="carnet" id="carnet">
+  <div class="carnet__avatar" aria-hidden="true">📰</div>
+  <div class="carnet__info">
+    <p class="carnet__titulo">Carnet de Reportero</p>
+    <div class="carnet__barra-wrap" role="progressbar" aria-label="Progreso de la redacción" aria-valuemin="0" aria-valuemax="4" id="barraProgreso" aria-valuenow="0">
+      <div class="carnet__barra" id="barraFill"></div>
+    </div>
+    <p class="carnet__submeta" id="carnetTexto">0 de 4 misiones cumplidas</p>
+  </div>
+  <div class="carnet__sellos" id="sellos">
+    <span class="sello" data-mision="mapa" title="Misión: El mapa de la noticia">🗺️</span>
+    <span class="sello" data-mision="rompecabezas" title="Misión: Rompecabezas de noticias">🧩</span>
+    <span class="sello" data-mision="titular" title="Misión: Cazatítulos">🎯</span>
+    <span class="sello" data-mision="copete" title="Misión: Redactores locos">✍️</span>
+  </div>
+</header>
+
+<main id="app">
+
+  <!-- ================= PANTALLA: INICIO ================= -->
+  <section class="screen activa" id="screen-inicio" data-screen="inicio">
+    <div class="corcho">
+      <h1 class="titulo-principal">¡Al Ataque, Reporteros! <span class="emoji-flotante">🕵️‍♀️</span></h1>
+      <p class="bajada-principal">Bienvenido/a a la redacción de <strong>El Diario Curioso</strong>. Hoy vas a entrenarte para reconocer las partes de una noticia. Cumplí las 4 misiones y conseguí tu carnet completo.</p>
+
+      <div class="leyenda" aria-label="Partes de la noticia">
+        <button class="chip chip--volanta" data-parte="volanta" type="button">Volanta</button>
+        <button class="chip chip--titular" data-parte="titular" type="button">Titular</button>
+        <button class="chip chip--copete" data-parte="copete" type="button">Copete</button>
+        <button class="chip chip--cuerpo" data-parte="cuerpo" type="button">Cuerpo de la noticia</button>
+        <button class="chip chip--epigrafe" data-parte="epigrafe" type="button">Epígrafe</button>
+      </div>
+      <p class="leyenda__ayuda" id="leyendaTexto">👆 Tocá una etiqueta para descubrir qué significa.</p>
+
+      <div class="notas-mision">
+        <article class="nota nota--amarilla" data-target="mapa">
+          <span class="nota__pin"></span>
+          <h2>🗺️ Misión 1</h2>
+          <p>El mapa de la noticia</p>
+          <small>Encontrá cada parte en un artículo real.</small>
+          <button class="btn btn--jugar" data-ir="mapa">Empezar</button>
+        </article>
+        <article class="nota nota--rosa" data-target="rompecabezas">
+          <span class="nota__pin"></span>
+          <h2>🧩 Misión 2</h2>
+          <p>Rompecabezas de noticias</p>
+          <small>Ordená noticias graciosas desordenadas.</small>
+          <button class="btn btn--jugar" data-ir="rompecabezas">Empezar</button>
+        </article>
+        <article class="nota nota--celeste" data-target="titular">
+          <span class="nota__pin"></span>
+          <h2>🎯 Misión 3</h2>
+          <p>Cazatítulos</p>
+          <small>Elegí el titular perfecto para cada noticia.</small>
+          <button class="btn btn--jugar" data-ir="titular">Empezar</button>
+        </article>
+        <article class="nota nota--verde" data-target="copete">
+          <span class="nota__pin"></span>
+          <h2>✍️ Misión 4</h2>
+          <p>Redactores locos</p>
+          <small>Escribí el copete de una noticia disparatada.</small>
+          <button class="btn btn--jugar" data-ir="copete">Empezar</button>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MISIÓN 1: MAPA INTERACTIVO ================= -->
+  <section class="screen" id="screen-mapa" data-screen="mapa">
+    <div class="panel">
+      <button class="btn btn--volver" data-volver>← Volver a la redacción</button>
+      <h2 class="panel__titulo">🗺️ Misión 1 · El mapa de la noticia</h2>
+      <p class="panel__consigna">Tocá una etiqueta del banco y después tocá la parte del artículo donde corresponde. ¡Completá las 5!</p>
+
+      <div class="banco-etiquetas" id="bancoEtiquetas" aria-label="Banco de etiquetas"></div>
+
+      <div class="periodico" id="periodicoMapa">
+        <div class="zona-noticia" data-parte="volanta">
+          <span class="zona-noticia__resultado" aria-hidden="true"></span>
+          <p class="txt-volanta">SORPRESA EN EL BARRIO LAS FLORES</p>
+        </div>
+        <div class="zona-noticia" data-parte="titular">
+          <span class="zona-noticia__resultado" aria-hidden="true"></span>
+          <h3 class="txt-titular">¡UN GATO ASTRONAUTA ATERRIZÓ EN LA PLAZA!</h3>
+        </div>
+        <div class="zona-noticia" data-parte="copete">
+          <span class="zona-noticia__resultado" aria-hidden="true"></span>
+          <p class="txt-copete">Ayer a las 17 horas, un gato con un diminuto traje espacial cayó en paracaídas justo en el medio de la plaza del barrio, ante la mirada atónita de los vecinos.</p>
+        </div>
+        <div class="periodico__columnas">
+          <div class="zona-noticia zona-noticia--cuerpo" data-parte="cuerpo">
+            <span class="zona-noticia__resultado" aria-hidden="true"></span>
+            <p class="txt-cuerpo">Testigos aseguran que escucharon un silbido en el cielo antes de ver un punto plateado acercándose. Cuando el paracaídas se abrió, todos vieron a un gato anaranjado con casco de vidrio y botas brillantes.</p>
+            <p class="txt-cuerpo">«Primero pensamos que era un juguete, pero cuando maulló, todos gritamos de la sorpresa», contó la vecina Marta Gómez. Los bomberos revisaron el «traje espacial» y descubrieron que era un disfraz hecho con materiales reciclados.</p>
+          </div>
+          <div class="zona-noticia zona-noticia--imagen" data-parte="epigrafe">
+            <span class="zona-noticia__resultado" aria-hidden="true"></span>
+            <div class="imagen-simulada">🐱🚀</div>
+            <p class="txt-epigrafe">El misterioso gato fue bautizado "Michi Luna" por los chicos del barrio.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel__pie">
+        <p id="mapaEstado" class="estado" aria-live="polite">Etiquetas colocadas: 0 / 5</p>
+        <button class="btn btn--reintentar" id="mapaReintentar" hidden>Intentar de nuevo</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MISIÓN 2: ROMPECABEZAS ================= -->
+  <section class="screen" id="screen-rompecabezas" data-screen="rompecabezas">
+    <div class="panel">
+      <button class="btn btn--volver" data-volver>← Volver a la redacción</button>
+      <h2 class="panel__titulo">🧩 Misión 2 · Rompecabezas de noticias</h2>
+      <p class="panel__consigna">Esta noticia está desordenada. Tocá dos piezas para intercambiarlas de lugar hasta que quede en el orden correcto: <strong>volanta → titular → copete → cuerpo → epígrafe</strong>.</p>
+
+      <p class="ronda-indicador">Noticia <span id="rondaPuzzleActual">1</span> de <span id="rondaPuzzleTotal">2</span></p>
+      <ul class="lista-puzzle" id="listaPuzzle" aria-label="Piezas de la noticia desordenadas"></ul>
+
+      <div class="panel__pie">
+        <p id="puzzleEstado" class="estado" aria-live="polite"></p>
+        <button class="btn btn--jugar" id="puzzleComprobar">Comprobar orden</button>
+        <button class="btn btn--reintentar" id="puzzleSiguiente" hidden>Siguiente noticia →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MISIÓN 3: CAZATÍTULOS ================= -->
+  <section class="screen" id="screen-titular" data-screen="titular">
+    <div class="panel">
+      <button class="btn btn--volver" data-volver>← Volver a la redacción</button>
+      <h2 class="panel__titulo">🎯 Misión 3 · Cazatítulos</h2>
+      <p class="panel__consigna">Leé el copete y elegí el titular que le corresponde.</p>
+
+      <p class="ronda-indicador">Noticia <span id="rondaTitularActual">1</span> de <span id="rondaTitularTotal">4</span></p>
+
+      <div class="tarjeta-copete">
+        <span class="etiqueta-mini etiqueta-mini--copete">COPETE</span>
+        <p id="copeteTexto"></p>
+      </div>
+
+      <div class="opciones-titular" id="opcionesTitular" aria-label="Opciones de titular"></div>
+
+      <div class="panel__pie">
+        <p id="titularEstado" class="estado" aria-live="polite"></p>
+        <button class="btn btn--reintentar" id="titularSiguiente" hidden>Siguiente noticia →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MISIÓN 4: REDACTORES LOCOS ================= -->
+  <section class="screen" id="screen-copete" data-screen="copete">
+    <div class="panel">
+      <button class="btn btn--volver" data-volver>← Volver a la redacción</button>
+      <h2 class="panel__titulo">✍️ Misión 4 · Redactores locos</h2>
+      <p class="panel__consigna">Elegí uno de estos titulares disparatados y escribí el copete: un párrafo cortito que cuente <strong>qué</strong>, <strong>quién</strong>, <strong>cuándo</strong> y <strong>dónde</strong>.</p>
+
+      <div class="titulares-locos" id="titularesLocos" aria-label="Titulares disparatados"></div>
+
+      <div class="zona-escritura" id="zonaEscritura" hidden>
+        <div class="tarjeta-copete tarjeta-copete--elegido">
+          <span class="etiqueta-mini etiqueta-mini--titular">TITULAR ELEGIDO</span>
+          <p id="tituloElegidoTexto"></p>
+        </div>
+
+        <label class="label-textarea" for="copeteInput">Tu copete:</label>
+        <textarea id="copeteInput" rows="4" placeholder="Ayer, en..."></textarea>
+        <p class="contador" id="contadorCopete">0 caracteres</p>
+
+        <fieldset class="checklist">
+          <legend>Antes de publicar, revisá que tu copete cuente:</legend>
+          <label><input type="checkbox" class="check-copete" data-chequeo="que"> <strong>Qué</strong> pasó</label>
+          <label><input type="checkbox" class="check-copete" data-chequeo="quien"> <strong>Quién</strong> es el protagonista</label>
+          <label><input type="checkbox" class="check-copete" data-chequeo="cuando"> <strong>Cuándo</strong> ocurrió</label>
+          <label><input type="checkbox" class="check-copete" data-chequeo="donde"> <strong>Dónde</strong> ocurrió</label>
+        </fieldset>
+
+        <button class="btn btn--jugar" id="publicarCopete" disabled>Publicar mi noticia</button>
+        <p id="copeteEstado" class="estado" aria-live="polite"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PANTALLA FINAL ================= -->
+  <section class="screen" id="screen-final" data-screen="final">
+    <div class="corcho corcho--final">
+      <div class="certificado">
+        <p class="certificado__eyebrow">El Diario Curioso otorga este carnet a</p>
+        <h2 class="certificado__nombre" id="certificadoRango">¡Reportero/a Estrella!</h2>
+        <div class="certificado__sellos" id="certificadoSellos"></div>
+        <p class="certificado__mensaje" id="certificadoMensaje"></p>
+        <button class="btn btn--jugar" id="reiniciarTodo">Volver a jugar</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ================= MODAL DE RECOMPENSA ================= -->
+<div class="modal-overlay" id="modalRecompensa" hidden>
+  <div class="modal-recompensa" role="alertdialog" aria-live="assertive" aria-label="Recompensa">
+    <div class="modal-recompensa__sello" id="modalSelloEmoji">🏅</div>
+    <h3 id="modalTitulo">¡Misión cumplida!</h3>
+    <p id="modalTexto"></p>
+    <button class="btn btn--jugar" id="modalCerrar">Genial, ¡seguir!</button>
+  </div>
+</div>
+
+<!-- Confeti -->
+<canvas id="canvasConfeti" aria-hidden="true"></canvas>
+
+<script src="script.js"></script>
+</body>
+</html>
