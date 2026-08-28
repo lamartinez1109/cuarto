@@ -327,6 +327,19 @@ main{ max-width: 980px; margin: 0 auto; padding: 22px 16px 60px; }
 .pieza-puzzle.correcta{ border-color: var(--exito); background:#eafff2; cursor:default; }
 .pieza-puzzle .etiqueta-mini{ display:inline-block; margin-bottom:4px; }
 
+.pieza-puzzle--epigrafe{ background: #eafbfa; }
+.pieza-epigrafe__contenido{ display:flex; align-items:center; gap:14px; margin-top:6px; }
+.pieza-epigrafe__foto{
+  width: 170px; height: 130px; object-fit: cover; border-radius: 10px;
+  border: 3px solid var(--epigrafe-dark); flex: 0 0 auto;
+  box-shadow: 0 4px 0 rgba(0,0,0,.15);
+}
+.pieza-epigrafe__contenido p{ margin:0; font-style: italic; font-size: 14px; }
+@media (max-width: 480px){
+  .pieza-epigrafe__contenido{ flex-direction: column; align-items:flex-start; }
+  .pieza-epigrafe__foto{ width: 100%; height: 220px; }
+}
+
 .etiqueta-mini{
   font-family: var(--font-display); font-size: 11px; font-weight:800; color:#fff;
   padding: 3px 10px; border-radius: 999px;
