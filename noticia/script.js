@@ -85,10 +85,26 @@ const TITULAR_RONDAS = [
 ];
 
 const TITULARES_LOCOS = [
-  'UN PULPO GANÓ EL CAMPEONATO DE AJEDREZ DEL BARRIO',
-  'LLUEVEN CARAMELOS EN LA PLAZA CENTRAL',
-  'UN ROBOT SE ANOTÓ EN LA ESCUELA PARA APRENDER A DIBUJAR',
-  'EL SOL SE TOMÓ EL DÍA LIBRE Y SALIÓ LA LUNA A LA TARDE'
+  {
+    titulo: 'UN PULPO GANÓ EL CAMPEONATO DE AJEDREZ DEL BARRIO',
+    emoji: '🐙♟️',
+    alt: 'Un pulpo sosteniendo piezas de ajedrez con varios de sus brazos.'
+  },
+  {
+    titulo: 'LLUEVEN CARAMELOS EN LA PLAZA CENTRAL',
+    emoji: '🍬🌧️',
+    alt: 'Caramelos de colores cayendo del cielo como si fuera lluvia.'
+  },
+  {
+    titulo: 'UN ROBOT SE ANOTÓ EN LA ESCUELA PARA APRENDER A DIBUJAR',
+    emoji: '🤖🎨',
+    alt: 'Un robot sosteniendo un pincel frente a un caballete de pintura.'
+  },
+  {
+    titulo: 'EL SOL SE TOMÓ EL DÍA LIBRE Y SALIÓ LA LUNA A LA TARDE',
+    emoji: '😴🌙',
+    alt: 'El sol durmiendo la siesta mientras la luna sale por la tarde.'
+  }
 ];
 
 /* =========================================================
@@ -460,50 +476,74 @@ function siguienteTitular() {
    MISIÓN 4 · REDACTORES LOCOS
    ========================================================= */
 
+let copeteRondaActual = 0;
+const CAMPOS_COPETE = ['inputQue', 'inputQuien', 'inputCuando', 'inputDonde'];
+
 function initCopete() {
-  const cont = $('#titularesLocos');
-  cont.innerHTML = '';
-  TITULARES_LOCOS.forEach(texto => {
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'titular-loco';
-    b.textContent = texto;
-    cont.appendChild(b);
-  });
-  $('#zonaEscritura').hidden = true;
-  $('#copeteInput').value = '';
-  $('#copeteInput').disabled = false;
-  $('#contadorCopete').textContent = '0 caracteres';
-  $all('.check-copete').forEach(c => { c.checked = false; c.disabled = false; });
-  $('#publicarCopete').disabled = true;
-  $('#publicarCopete').textContent = 'Publicar mi noticia';
-  $('#copeteEstado').textContent = '';
+  copeteRondaActual = 0;
+  $('#rondaCopeteTotal').textContent = String(TITULARES_LOCOS.length);
+  initRondaCopete(0);
 }
 
-function onTitularesLocosClick(e) {
-  const btn = e.target.closest('.titular-loco');
-  if (!btn) return;
-  $all('.titular-loco', $('#titularesLocos')).forEach(b => b.classList.remove('elegido'));
-  btn.classList.add('elegido');
-  $('#tituloElegidoTexto').textContent = btn.textContent;
-  $('#zonaEscritura').hidden = false;
-  $('#copeteInput').focus();
+function initRondaCopete(indice) {
+  copeteRondaActual = indice;
+  $('#rondaCopeteActual').textContent = String(indice + 1);
+  $('#tituloRondaTexto').textContent = TITULARES_LOCOS[indice].titulo;
+
+  CAMPOS_COPETE.forEach(id => {
+    const el = $('#' + id);
+    el.value = '';
+    el.disabled = false;
+  });
+
+  $('#publicarCopete').disabled = true;
+  $('#publicarCopete').hidden = false;
+  $('#revelacionPersonaje').hidden = true;
+  $('#personajeEmoji').textContent = '';
+  $('#copeteArmado').textContent = '';
+  $('#copeteEstado').textContent = '';
+  $('#copeteSiguiente').hidden = true;
+}
+
+function capitalizar(texto) {
+  if (!texto) return texto;
+  return texto.charAt(0).toUpperCase() + texto.slice(1);
 }
 
 function actualizarEstadoPublicar() {
-  const largo = $('#copeteInput').value.trim().length;
-  $('#contadorCopete').textContent = largo + ' caracteres';
-  const todosMarcados = $all('.check-copete').every(c => c.checked);
-  $('#publicarCopete').disabled = !(largo >= 25 && todosMarcados);
+  const todosCompletos = CAMPOS_COPETE.every(id => $('#' + id).value.trim().length >= 3);
+  $('#publicarCopete').disabled = !todosCompletos;
 }
 
 function publicarCopete() {
-  $('#copeteInput').disabled = true;
-  $all('.check-copete').forEach(c => (c.disabled = true));
-  $('#publicarCopete').disabled = true;
-  $('#publicarCopete').textContent = '¡Publicada! 🎉';
-  $('#copeteEstado').textContent = 'Tu noticia salió publicada en El Diario Curioso.';
-  completarMision('copete', '¡Copete publicado!', 'Redactaste el copete de una noticia disparatada. ¡Gran trabajo, redactor/a!', '✍️');
+  const que = $('#inputQue').value.trim();
+  const quien = $('#inputQuien').value.trim();
+  const cuando = $('#inputCuando').value.trim();
+  const donde = $('#inputDonde').value.trim();
+  const ronda = TITULARES_LOCOS[copeteRondaActual];
+
+  const copeteArmado = capitalizar(cuando) + ', ' + quien + ' protagonizó una noticia insólita: ' + que + '. Todo ocurrió en ' + donde + '.';
+
+  $('#copeteArmado').textContent = copeteArmado;
+  $('#personajeEmoji').textContent = ronda.emoji;
+  $('#personajeEmoji').setAttribute('aria-label', ronda.alt);
+  $('#revelacionPersonaje').hidden = false;
+  $('#publicarCopete').hidden = true;
+  CAMPOS_COPETE.forEach(id => ($('#' + id).disabled = true));
+
+  if (copeteRondaActual < TITULARES_LOCOS.length - 1) {
+    $('#copeteEstado').textContent = '¡Copete publicado! Mirá quién es el protagonista. 🎉';
+    $('#copeteSiguiente').hidden = false;
+  } else {
+    $('#copeteEstado').textContent = '¡Copete publicado! Mirá quién es el protagonista. 🎉';
+    completarMision('copete', '¡Redactores locos completado!', 'Escribiste el copete de las 4 noticias disparatadas y descubriste a todos los protagonistas.', '✍️');
+  }
+}
+
+function siguienteCopete() {
+  if (copeteRondaActual < TITULARES_LOCOS.length - 1) {
+    initRondaCopete(copeteRondaActual + 1);
+  }
 }
 
 /* =========================================================
@@ -580,8 +620,8 @@ document.addEventListener('DOMContentLoaded', () => {
   $('#opcionesTitular').addEventListener('click', onOpcionesTitularClick);
   $('#titularSiguiente').addEventListener('click', siguienteTitular);
 
-  $('#titularesLocos').addEventListener('click', onTitularesLocosClick);
-  $('#copeteInput').addEventListener('input', actualizarEstadoPublicar);
-  $all('.check-copete').forEach(c => c.addEventListener('change', actualizarEstadoPublicar));
+  CAMPOS_COPETE.forEach(id => $('#' + id).addEventListener('input', actualizarEstadoPublicar));
   $('#publicarCopete').addEventListener('click', publicarCopete);
+  $('#copeteSiguiente').addEventListener('click', siguienteCopete);
 });
+
