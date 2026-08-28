@@ -29,7 +29,7 @@ const PUZZLE_RONDAS = [
       volanta:  'INCREÍBLE HISTORIA ESCOLAR',
       titular:  'UN PERRO SE COMIÓ LA TAREA DE TODO EL CURSO',
       copete:   'El perro Firulais entró al salón de 4° grado durante el recreo y devoró las carpetas de los 25 alumnos, dejando a la maestra sin tareas para corregir.',
-      cuerpo:   'Según los alumnos, Firulais es la mascota de la escuela y suele pasear por los pasillos. Atraído por el olor de un sándwich escondido en una mochila, terminó comiéndose también varias hojas de tarea. La maestra Laura decidió perdonar al curso "por esta única vez".',
+      cuerpo:   'Según los alumnos, Firulais es la mascota de la escuela y suele pasear por los pasillos. Atraído por el olor de un sándwich escondido en una mochila, terminó comiéndose también varias hojas de tarea. La maestra Jorgelina decidió perdonar al curso "por esta única vez".',
       epigrafe: 'Firulais, el perro goloso, posando muy tranquilo después de su gran banquete de tareas.'
     }
   },
