@@ -372,25 +372,33 @@ main{ max-width: 980px; margin: 0 auto; padding: 22px 16px 60px; }
 /* =========================================================
    MISIÓN 4: REDACTORES LOCOS
    ========================================================= */
-.titulares-locos{ display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin-bottom: 20px; }
-.titular-loco{
-  border-radius: 12px; padding: 16px; border: 3px solid var(--titular);
-  background: #fff6f2; font-family: var(--font-display); font-weight:700; text-align:left; font-size:15px;
-}
-.titular-loco.elegido{ background: var(--titular); color:#fff; }
-
-.zona-escritura{ border-top: 3px dashed #e2ddcc; padding-top: 18px; margin-top: 6px; }
 .tarjeta-copete--elegido{ background:#fff6f2; border-color: var(--titular); }
-.label-textarea{ display:block; font-weight:700; margin-bottom:6px; }
-textarea{
-  width:100%; border-radius:12px; border:3px solid #e2ddcc; padding: 12px; font-family: var(--font-body);
-  font-size:15px; resize: vertical;
+
+.preguntas-copete{
+  display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+  gap: 14px; margin-bottom: 20px;
 }
-textarea:focus-visible{ outline: none; border-color: var(--copete); }
-.contador{ font-size:12px; color:#8a8398; margin: 4px 0 16px; }
-.checklist{ border: none; padding:0; margin: 0 0 18px; }
-.checklist legend{ font-weight:700; margin-bottom:8px; padding:0; }
-.checklist label{ display:flex; align-items:center; gap:8px; margin-bottom:8px; font-weight:600; }
+.pregunta-copete{ display:flex; flex-direction:column; gap:6px; }
+.pregunta-copete__label{ font-weight:700; font-size:14px; }
+.input-copete{
+  width:100%; border-radius:12px; border:3px solid #e2ddcc; padding: 10px 12px;
+  font-family: var(--font-body); font-size:15px; background:#fff;
+}
+.input-copete:focus-visible{ outline: none; border-color: var(--copete); }
+.input-copete:disabled{ background:#f4f2ea; color:#7a7a7a; }
+
+.revelacion-personaje{
+  margin-top: 20px; padding: 22px; border-radius: 16px; text-align:center;
+  background: linear-gradient(160deg, #fff6f2, #fff3d9);
+  border: 3px dashed var(--titular);
+}
+.revelacion-personaje__emoji{
+  font-size: 58px; margin-bottom: 10px;
+  animation: popIn .4s cubic-bezier(.34,1.56,.64,1);
+}
+.revelacion-personaje__titulo{ font-family: var(--font-display); font-weight:700; margin: 0 0 8px; color: var(--titular-dark); }
+.revelacion-personaje__copete{ font-weight:600; margin:0; max-width: 480px; margin-inline:auto; }
+
 
 /* =========================================================
    FINAL / CERTIFICADO
