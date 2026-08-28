@@ -167,30 +167,45 @@
     <div class="panel">
       <button class="btn btn--volver" data-volver>← Volver a la redacción</button>
       <h2 class="panel__titulo">✍️ Misión 4 · Redactores locos</h2>
-      <p class="panel__consigna">Elegí uno de estos titulares disparatados y escribí el copete: un párrafo cortito que cuente <strong>qué</strong>, <strong>quién</strong>, <strong>cuándo</strong> y <strong>dónde</strong>.</p>
+      <p class="panel__consigna">Vas a escribir el copete de las 4 noticias disparatadas. Para cada una, completá <strong>qué</strong> pasó, <strong>quién</strong> es el protagonista, <strong>cuándo</strong> y <strong>dónde</strong> ocurrió. Al publicar, ¡se va a revelar el protagonista de la noticia!</p>
 
-      <div class="titulares-locos" id="titularesLocos" aria-label="Titulares disparatados"></div>
+      <p class="ronda-indicador">Noticia <span id="rondaCopeteActual">1</span> de <span id="rondaCopeteTotal">4</span></p>
 
-      <div class="zona-escritura" id="zonaEscritura" hidden>
-        <div class="tarjeta-copete tarjeta-copete--elegido">
-          <span class="etiqueta-mini etiqueta-mini--titular">TITULAR ELEGIDO</span>
-          <p id="tituloElegidoTexto"></p>
-        </div>
+      <div class="tarjeta-copete tarjeta-copete--elegido">
+        <span class="etiqueta-mini etiqueta-mini--titular">TITULAR</span>
+        <p id="tituloRondaTexto"></p>
+      </div>
 
-        <label class="label-textarea" for="copeteInput">Tu copete:</label>
-        <textarea id="copeteInput" rows="4" placeholder="Ayer, en..."></textarea>
-        <p class="contador" id="contadorCopete">0 caracteres</p>
+      <div class="preguntas-copete">
+        <label class="pregunta-copete">
+          <span class="pregunta-copete__label">¿Qué pasó?</span>
+          <input type="text" id="inputQue" class="input-copete" placeholder="Ej: un pulpo ganó un campeonato de ajedrez">
+        </label>
+        <label class="pregunta-copete">
+          <span class="pregunta-copete__label">¿Quién es el protagonista?</span>
+          <input type="text" id="inputQuien" class="input-copete" placeholder="Ej: un pulpo llamado Ocho">
+        </label>
+        <label class="pregunta-copete">
+          <span class="pregunta-copete__label">¿Cuándo ocurrió?</span>
+          <input type="text" id="inputCuando" class="input-copete" placeholder="Ej: ayer a la tarde">
+        </label>
+        <label class="pregunta-copete">
+          <span class="pregunta-copete__label">¿Dónde ocurrió?</span>
+          <input type="text" id="inputDonde" class="input-copete" placeholder="Ej: en el club del barrio">
+        </label>
+      </div>
 
-        <fieldset class="checklist">
-          <legend>Antes de publicar, revisá que tu copete cuente:</legend>
-          <label><input type="checkbox" class="check-copete" data-chequeo="que"> <strong>Qué</strong> pasó</label>
-          <label><input type="checkbox" class="check-copete" data-chequeo="quien"> <strong>Quién</strong> es el protagonista</label>
-          <label><input type="checkbox" class="check-copete" data-chequeo="cuando"> <strong>Cuándo</strong> ocurrió</label>
-          <label><input type="checkbox" class="check-copete" data-chequeo="donde"> <strong>Dónde</strong> ocurrió</label>
-        </fieldset>
+      <button class="btn btn--jugar" id="publicarCopete" disabled>Publicar mi noticia</button>
 
-        <button class="btn btn--jugar" id="publicarCopete" disabled>Publicar mi noticia</button>
+      <div class="revelacion-personaje" id="revelacionPersonaje" hidden>
+        <div class="revelacion-personaje__emoji" id="personajeEmoji" aria-hidden="true"></div>
+        <p class="revelacion-personaje__titulo">¡Así quedó tu copete!</p>
+        <p class="revelacion-personaje__copete" id="copeteArmado"></p>
+      </div>
+
+      <div class="panel__pie">
         <p id="copeteEstado" class="estado" aria-live="polite"></p>
+        <button class="btn btn--reintentar" id="copeteSiguiente" hidden>Siguiente noticia →</button>
       </div>
     </div>
   </section>
@@ -226,3 +241,4 @@
 <script src="script.js"></script>
 </body>
 </html>
+
