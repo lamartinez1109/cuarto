@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1d2b4f">
+  <title>¡La Geósfera! – Capas de la Tierra</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- =====================================================================
+     PANTALLA 1 · BIENVENIDA
+     ===================================================================== -->
+<section id="pantalla-inicio" class="pantalla activa" aria-labelledby="titulo-inicio">
+  <div class="inicio">
+    <!-- Dibujo decorativo: la Tierra cortada por capas -->
+    <svg class="tierra-deco" viewBox="0 0 220 220" aria-hidden="true">
+      <defs><clipPath id="cuarto"><rect x="110" y="0" width="110" height="110"/></clipPath></defs>
+      <circle cx="110" cy="110" r="100" fill="#2a6fbf"/>
+      <path d="M38 82q20-28 48-12 10 16-6 30-27 6-42-18z" fill="#3fa06a"/>
+      <path d="M58 128q26-9 34 16-2 30-19 44-16-26-15-60z" fill="#3fa06a"/>
+      <path d="M128 132q22-6 38 10-6 22-27 24-16-16-11-34z" fill="#3fa06a"/>
+      <g clip-path="url(#cuarto)">
+        <circle cx="110" cy="110" r="100" fill="#7b4a26"/>
+        <circle cx="110" cy="110" r="92" fill="#f26a2e"/>
+        <circle cx="110" cy="110" r="58" fill="#ffab2e"/>
+        <circle cx="110" cy="110" r="30" fill="#ffe066"/>
+      </g>
+      <path d="M110 10V110H210" stroke="#fff" stroke-width="3" fill="none"/>
+    </svg>
+
+    <h1 id="titulo-inicio" class="titulo-capas"><span>¡LA</span> <span>GEÓSFERA!</span></h1>
+    <p class="subtitulo">Descubrí las capas de la Tierra y armá tu propia maqueta en 3D.</p>
+    <button id="btn-comenzar" class="btn btn-verde btn-enorme" type="button">
+      <span class="ico" aria-hidden="true">▶</span> COMENZAR
+    </button>
+  </div>
+</section>
+
+<!-- =====================================================================
+     PANTALLA 2 · MENÚ PRINCIPAL
+     ===================================================================== -->
+<section id="pantalla-menu" class="pantalla" aria-labelledby="titulo-menu">
+  <header class="barra-superior">
+    <button class="btn btn-gris" type="button" data-ir="inicio"><span class="ico" aria-hidden="true">←</span> Inicio</button>
+    <h2 id="titulo-menu" class="titulo-pantalla" tabindex="-1">¿Qué querés hacer hoy?</h2>
+  </header>
+  <div class="contenido menu-tarjetas">
+    <button class="tarjeta-menu tm-azul" type="button" data-ir="repaso">
+      <span class="tm-ico" aria-hidden="true">📚</span>
+      <span class="tm-titulo">Temas de repaso</span>
+      <span class="tm-texto">Repasá el tiempo, las capas de la Tierra y las placas.</span>
+    </button>
+    <button class="tarjeta-menu tm-naranja" type="button" data-ir="construir">
+      <span class="tm-ico" aria-hidden="true">🛠</span>
+      <span class="tm-titulo">Construcción</span>
+      <span class="tm-texto">Armá tu maqueta 3D de las capas de la Tierra.</span>
+    </button>
+    <button class="tarjeta-menu tm-verde" type="button" data-ir="maquetas">
+      <span class="tm-ico" aria-hidden="true">🖼</span>
+      <span class="tm-titulo">Ver maquetas</span>
+      <span class="tm-texto">Mirá las maquetas que guardaste.</span>
+    </button>
+  </div>
+</section>
+
+<!-- =====================================================================
+     PANTALLA 3 · MODO 1 – REPASO
+     Todo el texto está acá: el docente puede cambiarlo directamente.
+     ===================================================================== -->
+<section id="pantalla-repaso" class="pantalla" aria-labelledby="titulo-repaso">
+  <header class="barra-superior">
+    <button class="btn btn-gris" type="button" data-ir="menu"><span class="ico" aria-hidden="true">←</span> Menú</button>
+    <h2 id="titulo-repaso" class="titulo-pantalla" tabindex="-1">📚 Temas de repaso</h2>
+  </header>
+
+  <nav class="pestanas-repaso" role="tablist" aria-label="Temas">
+    <button class="btn pestana-repaso" role="tab" type="button" data-tema="tiempo"><span class="ico" aria-hidden="true">🌦</span> El tiempo</button>
+    <button class="btn pestana-repaso" role="tab" type="button" data-tema="subsistemas"><span class="ico" aria-hidden="true">🌍</span> Subsistemas</button>
+    <button class="btn pestana-repaso" role="tab" type="button" data-tema="capas"><span class="ico" aria-hidden="true">🧅</span> Capas</button>
+    <button class="btn pestana-repaso" role="tab" type="button" data-tema="placas"><span class="ico" aria-hidden="true">🧩</span> Placas</button>
+    <button class="btn pestana-repaso" role="tab" type="button" data-tema="fenomenos"><span class="ico" aria-hidden="true">🌋</span> Fenómenos</button>
+    <button class="btn pestana-repaso" role="tab" type="button" data-tema="sismo"><span class="ico" aria-hidden="true">🏫</span> Sismos</button>
+    <button class="btn pestana-repaso" role="tab" type="button" data-tema="quiz"><span class="ico" aria-hidden="true">⭐</span> ¡Probá!</button>
+  </nav>
+
+  <div class="contenido contenido-repaso">
+
+    <!-- ---------- TEMA: EL TIEMPO ---------- -->
+    <article class="tema" id="tema-tiempo">
+      <h3>¿Cómo está el tiempo?</h3>
+      <p>El <strong>tiempo</strong> es cómo está la atmósfera en un lugar y en un momento: si hace calor o frío, si llueve, si hay viento o nubes. El <strong>pronóstico</strong> nos cuenta cómo estará el tiempo en los próximos días.</p>
+      <div class="dos-columnas">
+        <div>
+          <svg id="escena-tiempo" class="escena-svg" data-t="soleado" viewBox="0 0 400 230" role="img" aria-label="Paisaje que cambia según el tiempo elegido">
+            <rect class="cielo" width="400" height="230"/>
+            <g class="sol">
+              <g class="rayos-sol" stroke="#ffb703" stroke-width="6" stroke-linecap="round">
+                <line x1="320" y1="14" x2="320" y2="26"/><line x1="320" y1="94" x2="320" y2="106"/>
+                <line x1="274" y1="60" x2="286" y2="60"/><line x1="354" y1="60" x2="366" y2="60"/>
+                <line x1="287" y1="27" x2="295" y2="35"/><line x1="345" y1="85" x2="353" y2="93"/>
+                <line x1="353" y1="27" x2="345" y2="35"/><line x1="295" y1="85" x2="287" y2="93"/>
+              </g>
+              <circle cx="320" cy="60" r="30" fill="#ffd54a"/>
+            </g>
+            <g class="nube n1"><ellipse cx="90" cy="60" rx="46" ry="22"/><ellipse cx="128" cy="52" rx="34" ry="20"/><ellipse cx="62" cy="66" rx="30" ry="16"/></g>
+            <g class="nube n2"><ellipse cx="250" cy="96" rx="54" ry="24"/><ellipse cx="292" cy="88" rx="36" ry="20"/><ellipse cx="220" cy="102" rx="32" ry="16"/></g>
+            <polygon class="rayo" points="196,112 176,150 194,150 182,184 224,134 204,134 216,112" fill="#ffe066" stroke="#e0a800" stroke-width="2"/>
+            <g class="lluvia" stroke="#2a6fbf" stroke-width="3" stroke-linecap="round">
+              <line class="gota" style="--d:0s" x1="70" y1="120" x2="64" y2="134"/>
+              <line class="gota" style="--d:.2s" x1="110" y1="124" x2="104" y2="138"/>
+              <line class="gota" style="--d:.5s" x1="150" y1="118" x2="144" y2="132"/>
+              <line class="gota" style="--d:.1s" x1="230" y1="126" x2="224" y2="140"/>
+              <line class="gota" style="--d:.4s" x1="270" y1="122" x2="264" y2="136"/>
+              <line class="gota" style="--d:.7s" x1="310" y1="128" x2="304" y2="142"/>
+              <line class="gota" style="--d:.3s" x1="350" y1="120" x2="344" y2="134"/>
+              <line class="gota" style="--d:.6s" x1="40" y1="130" x2="34" y2="144"/>
+              <line class="gota" style="--d:.15s" x1="180" y1="150" x2="174" y2="164"/>
+              <line class="gota" style="--d:.55s" x1="250" y1="150" x2="244" y2="164"/>
+            </g>
+            <rect class="suelo" x="0" y="184" width="400" height="46"/>
+            <g class="arbol">
+              <rect x="342" y="140" width="10" height="48" rx="4" fill="#7b4a26"/>
+              <circle cx="347" cy="128" r="26" fill="#3fa06a"/>
+              <circle cx="330" cy="142" r="16" fill="#2f8a58"/>
+              <circle cx="364" cy="140" r="16" fill="#2f8a58"/>
+            </g>
+            <g class="casita">
+              <rect x="40" y="150" width="70" height="40" fill="#f2c56b"/>
+              <polygon points="34,150 75,120 116,150" fill="#d94a2b"/>
+              <rect x="66" y="164" width="18" height="26" fill="#7b4a26"/>
+            </g>
+          </svg>
+          <div class="botones-fila" role="group" aria-label="Elegí el tiempo">
+            <button class="btn btn-chico btn-tiempo" type="button" aria-pressed="true" data-tiempo="soleado"
+              data-desc="Cielo despejado y mucho sol. Hace calor."
+              data-ropa="Remera, short, gorra y protector solar.">☀ Soleado</button>
+            <button class="btn btn-chico btn-tiempo" type="button" aria-pressed="false" data-tiempo="nublado"
+              data-desc="El cielo está cubierto de nubes. La temperatura es suave."
+              data-ropa="Remera y un buzo liviano por si refresca.">☁ Nublado</button>
+            <button class="btn btn-chico btn-tiempo" type="button" aria-pressed="false" data-tiempo="lluvia"
+              data-desc="Caen gotas de agua desde las nubes."
+              data-ropa="Piloto o impermeable, botas de goma y paraguas.">🌧 Lluvia</button>
+            <button class="btn btn-chico btn-tiempo" type="button" aria-pressed="false" data-tiempo="tormenta"
+              data-desc="Lluvia fuerte, truenos y rayos. Hay que quedarse en un lugar seguro."
+              data-ropa="Abrigo impermeable. No te quedes bajo los árboles ni en lugares abiertos.">⛈ Tormenta</button>
+            <button class="btn btn-chico btn-tiempo" type="button" aria-pressed="false" data-tiempo="viento"
+              data-desc="El aire se mueve fuerte: los árboles se doblan."
+              data-ropa="Campera cortaviento y cosas bien sujetas.">💨 Viento</button>
+          </div>
+        </div>
+        <div class="caja-info">
+          <h4>¿Qué pasa hoy?</h4>
+          <p id="texto-tiempo">Cielo despejado y mucho sol. Hace calor.</p>
+          <h4>¿Cómo me visto?</h4>
+          <p id="texto-ropa">Remera, short, gorra y protector solar.</p>
+          <h4>¿Para qué sirve el pronóstico?</h4>
+          <ul>
+            <li>Elegir la ropa y llevar paraguas.</li>
+            <li>Viajar y salir de paseo.</li>
+            <li>Cuidar los cultivos y el trabajo al aire libre.</li>
+            <li>Prevenir tormentas y temporales.</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <!-- ---------- TEMA: SUBSISTEMAS ---------- -->
+    <article class="tema" id="tema-subsistemas">
+      <h3>Los subsistemas terrestres</h3>
+      <p>La Tierra se divide en <strong>cuatro regiones</strong> que se relacionan entre sí. Tocá una tarjeta para verla en el paisaje.</p>
+      <div class="dos-columnas">
+        <svg id="paisaje" class="escena-svg" data-resalta="" viewBox="0 0 400 240" role="img" aria-label="Paisaje con montañas, un lago, un árbol y nubes">
+          <g class="sub atmo">
+            <rect width="400" height="240" fill="#bfe6fb"/>
+            <circle cx="338" cy="44" r="24" fill="#ffd54a"/>
+            <g class="nube-flota"><ellipse cx="70" cy="46" rx="40" ry="18" fill="#fff"/><ellipse cx="100" cy="38" rx="28" ry="16" fill="#fff"/></g>
+            <g class="nube-flota lenta"><ellipse cx="220" cy="70" rx="44" ry="18" fill="#fff"/><ellipse cx="248" cy="62" rx="26" ry="14" fill="#fff"/></g>
+          </g>
+          <g class="sub geo">
+            <polygon points="0,180 90,70 170,180" fill="#8a5a34"/>
+            <polygon points="90,70 74,96 90,90 104,100" fill="#fff"/>
+            <polygon points="120,180 210,54 300,180" fill="#7b4a26"/>
+            <polygon points="210,54 192,82 210,74 226,84" fill="#fff"/>
+            <rect y="176" width="400" height="64" fill="#9b6b3c"/>
+          </g>
+          <g class="sub hidro">
+            <ellipse cx="270" cy="208" rx="100" ry="24" fill="#2a6fbf"/>
+            <path class="ola-linea" d="M200 206q10-6 20 0t20 0 20 0 20 0 20 0 20 0" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path class="ola-linea dos" d="M230 216q10-6 20 0t20 0 20 0 20 0 20 0" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
+          </g>
+          <g class="sub bio">
+            <rect x="56" y="142" width="14" height="62" rx="5" fill="#5a3418"/>
+            <circle cx="63" cy="128" r="32" fill="#3fa06a"/>
+            <circle cx="40" cy="146" r="20" fill="#2f8a58"/>
+            <circle cx="88" cy="146" r="20" fill="#2f8a58"/>
+            <circle cx="140" cy="214" r="6" fill="#ff5c8a"/><circle cx="160" cy="222" r="6" fill="#ffd54a"/><circle cx="118" cy="224" r="6" fill="#fff"/>
+            <g class="pajaro"><path d="M300 90q10-12 20 0 10-12 20 0" stroke="#1d2b4f" stroke-width="3" fill="none" stroke-linecap="round"/></g>
+          </g>
+        </svg>
+        <div class="tarjetas-sub">
+          <button class="tarjeta-sub ts-geo" type="button" data-sub="geo" aria-pressed="false">
+            <strong>🪨 Geósfera</strong><span>La parte rocosa del planeta. Sobre ella se desarrollan los otros tres subsistemas.</span>
+          </button>
+          <button class="tarjeta-sub ts-atmo" type="button" data-sub="atmo" aria-pressed="false">
+            <strong>☁ Atmósfera</strong><span>La capa de gases que rodea al planeta. Tiene oxígeno y dióxido de carbono. En la tropósfera ocurre el tiempo.</span>
+          </button>
+          <button class="tarjeta-sub ts-hidro" type="button" data-sub="hidro" aria-pressed="false">
+            <strong>💧 Hidrósfera</strong><span>Toda el agua de la Tierra: sólida, líquida o gaseosa. Ocupa cerca del 70 % del planeta.</span>
+          </button>
+          <button class="tarjeta-sub ts-bio" type="button" data-sub="bio" aria-pressed="false">
+            <strong>🌳 Biósfera</strong><span>Todos los seres vivos: microscópicos o enormes, en el agua o sobre la tierra.</span>
+          </button>
+        </div>
+      </div>
+      <div class="caja-info ancho">
+        <h4>¿Cómo se relacionan?</h4>
+        <p>Una planta absorbe dióxido de carbono del aire, una jirafa bebe agua de una laguna y una lombriz cava túneles en la tierra. ¡Los cuatro subsistemas interactúan todo el tiempo! Por eso el suelo se forma con la roca, el agua, el viento y los seres vivos.</p>
+      </div>
+    </article>
+
+    <!-- ---------- TEMA: CAPAS ---------- -->
+    <article class="tema" id="tema-capas">
+      <h3>Las capas de la geósfera</h3>
+      <p>Desde la superficie hasta el centro, la Tierra tiene capas. Tocá una capa para conocerla.</p>
+      <div class="dos-columnas">
+        <div class="capas-zona">
+          <svg class="capas-svg" viewBox="0 0 300 300" role="img" aria-label="Corte de la Tierra con sus capas">
+            <circle class="capa" data-capa="corteza" cx="150" cy="150" r="140" fill="#7b4a26"/>
+            <circle class="capa" data-capa="manto-sup" cx="150" cy="150" r="126" fill="#f26a2e"/>
+            <circle class="capa" data-capa="manto-inf" cx="150" cy="150" r="94" fill="#d94a2b"/>
+            <circle class="capa" data-capa="nucleo-ext" cx="150" cy="150" r="60" fill="#ffab2e"/>
+            <circle class="flujo" cx="150" cy="150" r="46" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="8 12" stroke-linecap="round"/>
+            <circle class="capa nucleo-latido" data-capa="nucleo-int" cx="150" cy="150" r="30" fill="#ffe066"/>
+          </svg>
+          <div class="botones-capas" role="group" aria-label="Capas de la Tierra">
+            <button class="btn btn-chico btn-capa" type="button" data-capa="corteza"><i style="background:#7b4a26"></i> Corteza</button>
+            <button class="btn btn-chico btn-capa" type="button" data-capa="manto-sup"><i style="background:#f26a2e"></i> Manto superior</button>
+            <button class="btn btn-chico btn-capa" type="button" data-capa="manto-inf"><i style="background:#d94a2b"></i> Manto inferior</button>
+            <button class="btn btn-chico btn-capa" type="button" data-capa="nucleo-ext"><i style="background:#ffab2e"></i> Núcleo externo</button>
+            <button class="btn btn-chico btn-capa" type="button" data-capa="nucleo-int"><i style="background:#ffe066"></i> Núcleo interno</button>
+          </div>
+        </div>
+        <div>
+          <div class="caja-info info-capa" data-info="corteza" hidden>
+            <h4>🟤 Corteza</h4>
+            <p><strong>Composición:</strong> es la capa más externa y delgada. Tiene dos tipos de roca sólida: granito (corteza continental, bajo los continentes) y basalto (corteza oceánica, bajo los océanos).</p>
+            <p><strong>Comportamiento:</strong> junto con la parte más externa del manto forma la <em>litósfera</em>, una capa rígida.</p>
+          </div>
+          <div class="caja-info info-capa" data-info="manto-sup" hidden>
+            <h4>🟠 Manto superior</h4>
+            <p><strong>Composición:</strong> el manto es la capa intermedia y más gruesa. Está formado por rocas fundidas que forman el magma.</p>
+            <p><strong>Comportamiento:</strong> su parte más externa es parte de la litósfera. Debajo está la <em>astenósfera</em>, con consistencia viscosa, como la miel, por las altas temperaturas. Sobre ella se mueven las placas.</p>
+          </div>
+          <div class="caja-info info-capa" data-info="manto-inf" hidden>
+            <h4>🔴 Manto inferior</h4>
+            <p><strong>Composición:</strong> sigue siendo manto: rocas muy calientes.</p>
+            <p><strong>Comportamiento:</strong> es la <em>mesósfera</em>, la parte más interna del manto. Su consistencia es más rígida que la de la astenósfera.</p>
+          </div>
+          <div class="caja-info info-capa" data-info="nucleo-ext" hidden>
+            <h4>🟡 Núcleo externo</h4>
+            <p><strong>Composición:</strong> metales, entre ellos hierro y níquel.</p>
+            <p><strong>Comportamiento:</strong> es una capa fluida y está en movimiento. Ese movimiento genera el magnetismo terrestre.</p>
+          </div>
+          <div class="caja-info info-capa" data-info="nucleo-int" hidden>
+            <h4>⭐ Núcleo interno</h4>
+            <p><strong>Composición:</strong> metales, entre ellos hierro y níquel.</p>
+            <p><strong>Comportamiento:</strong> es una capa rígida. Soporta la mayor presión y temperatura: ¡llega a 6.000 °C!</p>
+          </div>
+          <div class="caja-info dato-hondo">
+            <h4>¿Qué tan profundo llegamos?</h4>
+            <p>El pozo más hondo que se cavó llega a <strong>12,3 km</strong>. El centro de la Tierra está a unos <strong>6.371 km</strong>.</p>
+            <div class="barra-dato" aria-hidden="true"><span class="poco"></span></div>
+            <small>La barra de arriba muestra cuánto profundizamos (¡casi nada!) comparado con la distancia al centro.</small>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- ---------- TEMA: PLACAS ---------- -->
+    <article class="tema" id="tema-placas">
+      <h3>Las placas tectónicas</h3>
+      <p>La litósfera está dividida en <strong>20 placas rígidas</strong>: 8 grandes y 12 pequeñas. Se mueven muy despacio, cerca de <strong>3 centímetros por año</strong>, porque están apoyadas sobre la astenósfera. Los bordes de las placas se llaman <strong>márgenes</strong>.</p>
+      <div class="tres-columnas">
+
+        <div class="tarjeta-anim">
+          <svg class="anim-svg" viewBox="0 0 240 150" role="img" aria-label="Dos placas que chocan: una se hunde bajo la otra">
+            <rect width="240" height="150" fill="#d9f0fb"/>
+            <rect y="100" width="240" height="50" fill="#f26a2e"/>
+            <g class="conv-a"><polygon points="0,72 130,72 130,104 0,104" fill="#7b4a26"/></g>
+            <g class="conv-b">
+              <polygon points="120,62 240,62 240,102 120,102" fill="#a5763f"/>
+              <polygon points="160,62 186,26 212,62" fill="#8a5a34"/>
+              <polygon points="186,26 178,38 186,35 194,39" fill="#fff"/>
+            </g>
+            <text x="14" y="130" font-size="13" font-weight="800" fill="#fff">→ ←</text>
+          </svg>
+          <h4>Convergentes</h4>
+          <p>Las placas <strong>chocan</strong>. Una se hunde mientras la otra se eleva. Se forman montañas, terremotos y volcanes.</p>
+          <p class="ejemplo"><strong>Ejemplo:</strong> Nazca y Sudamericana → cordillera de los Andes.</p>
+        </div>
+
+        <div class="tarjeta-anim">
+          <svg class="anim-svg" viewBox="0 0 240 150" role="img" aria-label="Dos placas que se separan y sale magma por el medio">
+            <rect width="240" height="150" fill="#d9f0fb"/>
+            <rect y="100" width="240" height="50" fill="#f26a2e"/>
+            <rect class="magma-grieta" x="106" y="70" width="28" height="34" fill="#d94a2b"/>
+            <g class="div-a"><polygon points="0,72 106,72 106,104 0,104" fill="#7b4a26"/></g>
+            <g class="div-b"><polygon points="134,72 240,72 240,104 134,104" fill="#a5763f"/></g>
+            <text x="14" y="130" font-size="13" font-weight="800" fill="#fff">← →</text>
+          </svg>
+          <h4>Divergentes</h4>
+          <p>Las placas <strong>se separan</strong>. Sale magma por la grieta, se enfría y se endurece: nace corteza nueva.</p>
+          <p class="ejemplo"><strong>Ejemplo:</strong> Sudamericana y Africana → dorsal del océano Atlántico.</p>
+        </div>
+
+        <div class="tarjeta-anim">
+          <svg class="anim-svg" viewBox="0 0 240 150" role="img" aria-label="Dos placas que se deslizan en sentidos contrarios, vistas desde arriba">
+            <rect width="240" height="150" fill="#e6d3a8"/>
+            <g class="trans-a"><rect x="10" y="20" width="106" height="110" rx="6" fill="#a5763f"/><text x="63" y="80" text-anchor="middle" font-size="22" font-weight="800" fill="#fff">↑</text></g>
+            <g class="trans-b"><rect x="124" y="20" width="106" height="110" rx="6" fill="#8a5a34"/><text x="177" y="80" text-anchor="middle" font-size="22" font-weight="800" fill="#fff">↓</text></g>
+            <line x1="120" y1="8" x2="120" y2="142" stroke="#d94a2b" stroke-width="3" stroke-dasharray="6 5"/>
+          </svg>
+          <h4>Transformantes</h4>
+          <p>Las placas <strong>se rozan</strong> y se deslizan en sentidos distintos. Puede haber terremotos.</p>
+          <p class="ejemplo"><strong>Ejemplo:</strong> Pacífica y Norteamericana → falla de San Andrés.</p>
+        </div>
+      </div>
+      <div class="caja-info ancho">
+        <h4>Y en nuestro país…</h4>
+        <p>La Argentina está sobre la placa <strong>Sudamericana</strong>. Al oeste, la placa de Nazca se hunde debajo de ella. Por eso tenemos la cordillera de los Andes, volcanes y muchos sismos en la zona de cordillera.</p>
+      </div>
+    </article>
+
+    <!-- ---------- TEMA: FENÓMENOS ---------- -->
+    <article class="tema" id="tema-fenomenos">
+      <h3>Fenómenos de la geósfera</h3>
+      <p>Algunos cambios de la Tierra tardan millones de años. Otros son bruscos y ocurren en poco tiempo, porque el interior del planeta está en constante cambio.</p>
+      <div class="tres-columnas">
+
+        <div class="tarjeta-anim">
+          <svg class="anim-svg" viewBox="0 0 240 160" role="img" aria-label="Volcán en erupción">
+            <rect width="240" height="160" fill="#d9f0fb"/>
+            <ellipse class="ceniza" cx="120" cy="34" rx="46" ry="22" fill="#8d97a8"/>
+            <ellipse class="ceniza dos" cx="150" cy="24" rx="34" ry="16" fill="#a5adbb"/>
+            <polygon points="16,150 98,54 142,54 224,150" fill="#7b4a26"/>
+            <path class="lava-flujo" d="M104 58q-12 34-22 72h18q10-36 20-72z" fill="#f26a2e"/>
+            <polygon points="98,54 142,54 134,62 106,62" fill="#4a2a12"/>
+            <circle class="chispa" style="--dx:-40px;--dy:-52px" cx="120" cy="54" r="5" fill="#ffab2e"/>
+            <circle class="chispa" style="--dx:-20px;--dy:-64px;--r:.4s" cx="120" cy="54" r="4" fill="#d94a2b"/>
+            <circle class="chispa" style="--dx:0px;--dy:-70px;--r:.8s" cx="120" cy="54" r="5" fill="#ffe066"/>
+            <circle class="chispa" style="--dx:22px;--dy:-60px;--r:.2s" cx="120" cy="54" r="4" fill="#ffab2e"/>
+            <circle class="chispa" style="--dx:42px;--dy:-50px;--r:.6s" cx="120" cy="54" r="5" fill="#d94a2b"/>
+          </svg>
+          <h4>Erupción volcánica</h4>
+          <p>El volcán es un cono de lava y rocas que se acumulan alrededor de un cráter. En la erupción salen <strong>magma, cenizas y fragmentos de roca</strong>.</p>
+          <p class="ejemplo">Suele ocurrir en márgenes convergentes. El magma que sale a la superficie se llama <strong>lava</strong>.</p>
+        </div>
+
+        <div class="tarjeta-anim">
+          <svg class="anim-svg" viewBox="0 0 240 160" role="img" aria-label="Terremoto: ondas que salen del hipocentro y hacen temblar una casa">
+            <rect width="240" height="160" fill="#d9f0fb"/>
+            <rect y="84" width="240" height="76" fill="#a5763f"/>
+            <circle class="onda" cx="70" cy="132" r="8" fill="none" stroke="#d94a2b" stroke-width="3"/>
+            <circle class="onda dos" cx="70" cy="132" r="8" fill="none" stroke="#d94a2b" stroke-width="3"/>
+            <circle class="onda tres" cx="70" cy="132" r="8" fill="none" stroke="#d94a2b" stroke-width="3"/>
+            <line x1="70" y1="132" x2="70" y2="84" stroke="#fff" stroke-width="2" stroke-dasharray="4 4"/>
+            <circle cx="70" cy="132" r="7" fill="#d94a2b" stroke="#fff" stroke-width="2"/>
+            <polygon points="70,84 62,70 78,70" fill="#ffd54a" stroke="#1d2b4f" stroke-width="2"/>
+            <text x="86" y="128" font-size="12" font-weight="800" fill="#fff">Hipocentro</text>
+            <text x="84" y="66" font-size="12" font-weight="800" fill="#1d2b4f">Epicentro</text>
+            <g class="casa-tiembla">
+              <rect x="170" y="52" width="46" height="32" fill="#f2c56b" stroke="#1d2b4f" stroke-width="2"/>
+              <polygon points="164,52 193,30 222,52" fill="#d94a2b" stroke="#1d2b4f" stroke-width="2"/>
+              <rect x="186" y="62" width="14" height="22" fill="#7b4a26"/>
+            </g>
+          </svg>
+          <h4>Terremoto</h4>
+          <p>Se genera por el <strong>roce de las placas</strong>. Se acumula energía y se libera de golpe: las rocas se rompen y <strong>la superficie tiembla</strong>.</p>
+          <p class="ejemplo">El <strong>hipocentro</strong> está bajo tierra; el <strong>epicentro</strong> está justo encima, en la superficie. La magnitud se mide con la escala de Richter.</p>
+        </div>
+
+        <div class="tarjeta-anim">
+          <svg class="anim-svg" viewBox="0 0 240 160" role="img" aria-label="Maremoto que produce una ola gigante hacia la costa">
+            <rect width="240" height="160" fill="#d9f0fb"/>
+            <rect y="88" width="240" height="72" fill="#2a6fbf"/>
+            <polygon points="0,142 240,142 240,160 0,160" fill="#7b4a26"/>
+            <polygon points="178,160 178,104 240,84 240,160" fill="#e8c77a"/>
+            <circle class="onda" cx="34" cy="142" r="8" fill="none" stroke="#ffd54a" stroke-width="3"/>
+            <circle class="onda dos" cx="34" cy="142" r="8" fill="none" stroke="#ffd54a" stroke-width="3"/>
+            <g class="ola-gigante"><path d="M0 92q14-52 42-52 6 30 0 52z" fill="#4aa3ea" stroke="#fff" stroke-width="2"/></g>
+            <text x="8" y="132" font-size="12" font-weight="800" fill="#fff">Maremoto</text>
+          </svg>
+          <h4>Maremoto y tsunami</h4>
+          <p>Un <strong>maremoto</strong> es un terremoto con epicentro en el fondo del océano. Mueve una gran masa de agua que puede transformarse en una <strong>ola gigante: el tsunami</strong>.</p>
+          <p class="ejemplo">El tsunami llega a la costa y causa destrucción. También puede producirse por la erupción de un volcán submarino.</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- ---------- TEMA: SISMOS ---------- -->
+    <article class="tema" id="tema-sismo">
+      <h3>¿Qué hago si hay un sismo?</h3>
+      <p>Saber qué hacer nos ayuda a cuidarnos. Estas ideas sirven en la escuela y en casa. Tu docente te va a enseñar la ruta de evacuación y la zona segura de tu escuela.</p>
+      <ol class="pasos-sismo">
+        <li><span class="paso-ico" aria-hidden="true">😌</span><div><strong>Mantené la calma.</strong> No corras ni grites.</div></li>
+        <li><span class="paso-ico" aria-hidden="true">🪟</span><div><strong>Alejate de ventanas</strong>, vidrios, estantes y objetos que puedan caer.</div></li>
+        <li><span class="paso-ico" aria-hidden="true">🧎</span><div><strong>Agachate, cubrite y sujetate.</strong> Metete debajo de una mesa firme y protegé tu cabeza y cuello.</div></li>
+        <li><span class="paso-ico" aria-hidden="true">👩‍🏫</span><div><strong>Seguí las indicaciones</strong> de tu docente y andá a la zona segura.</div></li>
+        <li><span class="paso-ico" aria-hidden="true">🚶</span><div><strong>Cuando pase el movimiento,</strong> salí caminando en orden por la ruta de evacuación. No uses el ascensor.</div></li>
+      </ol>
+      <div class="caja-info ancho">
+        <h4>Para hacer en clase</h4>
+        <p>Dibujá un croquis de tu escuela. Marcá la ruta que hay que seguir en caso de sismo y la zona segura que debemos ocupar.</p>
+      </div>
+    </article>
+
+    <!-- ---------- TEMA: QUIZ (se arma desde script.js) ---------- -->
+    <article class="tema" id="tema-quiz">
+      <h3>¡Probá lo que aprendiste!</h3>
+      <div id="quiz" class="quiz" aria-live="polite"></div>
+    </article>
+
+    <div class="pie-repaso">
+      <button class="btn btn-naranja btn-grande" type="button" data-ir="construir"><span class="ico" aria-hidden="true">🛠</span> ¡Ir a construir mi maqueta!</button>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     PANTALLA 4 · MODO 2 (CONSTRUIR) Y MODO 3 (EXPLORAR)
+     Comparten el mismo espacio 3D. El atributo data-modo cambia lo visible.
+     ===================================================================== -->
+<section id="pantalla-taller" class="pantalla" data-modo="construir" data-tab="elementos" aria-labelledby="titulo-taller">
+  <header class="barra-superior barra-taller">
+    <button id="btn-volver-menu" class="btn btn-gris" type="button"><span class="ico" aria-hidden="true">←</span> Menú</button>
+    <h2 id="titulo-taller" class="titulo-pantalla" tabindex="-1">🌍 Capas de la Tierra</h2>
+    <span id="etiqueta-modo" class="pildora">🛠 Construir</span>
+    <div class="pestanas-taller" role="group" aria-label="Paneles">
+      <button class="btn btn-chico" type="button" data-tab="elementos" aria-pressed="true">🧱 Formas</button>
+      <button class="btn btn-chico" type="button" data-tab="objeto" aria-pressed="false">🎛 Objeto</button>
+    </div>
+  </header>
+
+  <div class="taller-cuerpo">
+
+    <!-- IZQUIERDA: elementos 3D -->
+    <aside class="panel panel-izq" aria-label="Formas para construir">
+      <h3>1. Elegí una forma</h3>
+      <div id="lista-formas" class="rejilla-formas"></div>
+      <h3>Ayudas</h3>
+      <button id="btn-ejemplo" class="btn btn-naranja btn-ancho" type="button"><span class="ico" aria-hidden="true">🌍</span> Ejemplo: Tierra por capas</button>
+      <button id="btn-multiple" class="btn btn-gris btn-ancho" type="button" aria-pressed="false"><span class="ico" aria-hidden="true">☑</span> Elegir varios</button>
+      <button id="btn-todo" class="btn btn-gris btn-ancho" type="button"><span class="ico" aria-hidden="true">✅</span> Elegir todo</button>
+    </aside>
+
+    <!-- CENTRO: área principal de construcción -->
+    <div id="zona-3d" class="lienzo">
+      <canvas id="lienzo-3d" tabindex="0" aria-label="Espacio de construcción 3D"></canvas>
+      <div id="aviso-sin-3d" class="aviso-sin-3d" hidden>
+        <p><strong>No se pudo iniciar el espacio 3D.</strong></p>
+        <p>Revisá la conexión a internet (Three.js se descarga la primera vez) y volvé a abrir la página en Google Chrome.</p>
+      </div>
+
+      <div class="sup sup-vistas" role="group" aria-label="Vistas de la maqueta">
+        <button class="btn btn-chico btn-vista" type="button" data-vista="libre" aria-pressed="true">🌍 3D libre</button>
+        <button class="btn btn-chico btn-vista" type="button" data-vista="arriba" aria-pressed="false">⬇ Desde arriba</button>
+        <button class="btn btn-chico btn-vista" type="button" data-vista="frontal" aria-pressed="false">▣ De frente</button>
+        <button class="btn btn-chico btn-vista" type="button" data-vista="lateral" aria-pressed="false">◧ De costado</button>
+      </div>
+
+      <div id="info-objeto" class="info-objeto" hidden></div>
+
+      <div class="sup sup-camara">
+        <button id="btn-pad" class="btn btn-chico" type="button" aria-expanded="true" aria-controls="pad-camara">🎥 Cámara</button>
+        <div id="pad-camara" class="pad-camara" role="group" aria-label="Controles de cámara">
+          <button class="btn-cam" type="button" data-cam="girar-izq" aria-label="Girar a la izquierda">↺<small>Girar</small></button>
+          <button class="btn-cam" type="button" data-cam="arriba" aria-label="Mover la vista hacia arriba">⬆<small>Arriba</small></button>
+          <button class="btn-cam" type="button" data-cam="girar-der" aria-label="Girar a la derecha">↻<small>Girar</small></button>
+          <button class="btn-cam" type="button" data-cam="izquierda" aria-label="Mover la vista a la izquierda">⬅<small>Mover</small></button>
+          <button class="btn-cam" type="button" data-cam="centrar" aria-label="Centrar la maqueta">🎯<small>Centrar</small></button>
+          <button class="btn-cam" type="button" data-cam="derecha" aria-label="Mover la vista a la derecha">➡<small>Mover</small></button>
+          <button class="btn-cam" type="button" data-cam="acercar" aria-label="Acercar">➕<small>Acercar</small></button>
+          <button class="btn-cam" type="button" data-cam="abajo" aria-label="Mover la vista hacia abajo">⬇<small>Abajo</small></button>
+          <button class="btn-cam" type="button" data-cam="alejar" aria-label="Alejar">➖<small>Alejar</small></button>
+        </div>
+      </div>
+
+      <!-- Tarjeta que se ve solo en "Mostrar mi maqueta" -->
+      <div id="tarjeta-presentacion" class="tarjeta-presentacion" hidden>
+        <div>
+          <strong id="pres-nombre">Mi maqueta</strong>
+          <span id="pres-autor"></span>
+          <span id="pres-vista" class="pres-vista"></span>
+        </div>
+        <button id="btn-salir-presentacion" class="btn btn-rojo" type="button">✖ Salir</button>
+      </div>
+    </div>
+
+    <!-- DERECHA: controles del objeto seleccionado -->
+    <aside class="panel panel-der" aria-label="Controles del objeto elegido">
+      <div id="panel-vacio" class="vacio">
+        <div class="vacio-ico" aria-hidden="true">👆</div>
+        <p><strong>Tocá un objeto</strong> de la maqueta para cambiarlo.</p>
+        <p>Si todavía no hay ninguno, elegí una forma para empezar.</p>
+      </div>
+
+      <div id="panel-controles" hidden>
+        <h3 id="titulo-seleccion">Objeto elegido</h3>
+
+        <section class="grupo-ctrl">
+          <h4>↔ Mover</h4>
+          <div class="cuadricula-3">
+            <button class="btn-ctrl" type="button" data-mover="izquierda">←<small>Izquierda</small></button>
+            <button class="btn-ctrl" type="button" data-mover="adelante">↑<small>Adelante</small></button>
+            <button class="btn-ctrl" type="button" data-mover="derecha">→<small>Derecha</small></button>
+            <button class="btn-ctrl" type="button" data-mover="subir">▲<small>Subir</small></button>
+            <button class="btn-ctrl" type="button" data-mover="atras">↓<small>Atrás</small></button>
+            <button class="btn-ctrl" type="button" data-mover="bajar">▼<small>Bajar</small></button>
+          </div>
+        </section>
+
+        <section class="grupo-ctrl">
+          <h4>⤢ Tamaño</h4>
+          <div class="cuadricula-2">
+            <button class="btn-ctrl" type="button" data-tam="mas">➕<small>Agrandar</small></button>
+            <button class="btn-ctrl" type="button" data-tam="menos">➖<small>Achicar</small></button>
+          </div>
+          <details class="mas-tamano">
+            <summary>Más formas de cambiar el tamaño</summary>
+            <div class="cuadricula-2">
+              <button class="btn-ctrl chico" type="button" data-eje="x" data-signo="1">↔ Más ancho</button>
+              <button class="btn-ctrl chico" type="button" data-eje="x" data-signo="-1">↔ Más angosto</button>
+              <button class="btn-ctrl chico" type="button" data-eje="y" data-signo="1">↕ Más alto</button>
+              <button class="btn-ctrl chico" type="button" data-eje="y" data-signo="-1">↕ Más bajo</button>
+              <button class="btn-ctrl chico" type="button" data-eje="z" data-signo="1">⤢ Más largo</button>
+              <button class="btn-ctrl chico" type="button" data-eje="z" data-signo="-1">⤢ Más corto</button>
+            </div>
+          </details>
+        </section>
+
+        <section class="grupo-ctrl">
+          <h4>↻ Girar</h4>
+          <div class="cuadricula-3">
+            <button class="btn-ctrl" type="button" data-rot="y-izq">↺<small>Girar</small></button>
+            <button class="btn-ctrl" type="button" data-rot="x-atras">⤴<small>Inclinar</small></button>
+            <button class="btn-ctrl" type="button" data-rot="z-izq">↶<small>Rodar</small></button>
+            <button class="btn-ctrl" type="button" data-rot="y-der">↻<small>Girar</small></button>
+            <button class="btn-ctrl" type="button" data-rot="x-adelante">⤵<small>Inclinar</small></button>
+            <button class="btn-ctrl" type="button" data-rot="z-der">↷<small>Rodar</small></button>
+          </div>
+        </section>
+
+        <section class="grupo-ctrl">
+          <h4>🎨 Color</h4>
+          <div id="paleta" class="paleta" role="group" aria-label="Colores"></div>
+          <p class="nombre-color">Color: <strong id="nombre-color">–</strong></p>
+          <label class="btn btn-gris btn-chico color-libre">🎨 Otro color <input type="color" id="color-libre" value="#8b5a2b"></label>
+        </section>
+
+        <section class="grupo-ctrl">
+          <h4>🧱 Textura</h4>
+          <div id="texturas" class="texturas" role="group" aria-label="Texturas"></div>
+        </section>
+
+        <section class="grupo-ctrl">
+          <h4>🏷 Etiqueta</h4>
+          <div class="fila-etiqueta">
+            <input id="entrada-etiqueta" type="text" maxlength="24" placeholder="Ej.: Manto" aria-label="Texto de la etiqueta" autocomplete="off">
+            <button id="btn-poner-etiqueta" class="btn btn-azul btn-chico" type="button">Poner</button>
+          </div>
+          <div id="chips-etiquetas" class="chips" role="group" aria-label="Etiquetas sugeridas"></div>
+          <button id="btn-quitar-etiqueta" class="btn btn-gris btn-chico" type="button">Quitar etiqueta</button>
+        </section>
+
+        <section class="grupo-ctrl">
+          <h4>⚙ Acciones</h4>
+          <div class="cuadricula-3">
+            <button id="btn-copiar" class="btn-ctrl" type="button">📄<small>Copiar</small></button>
+            <button id="btn-cortar" class="btn-ctrl" type="button">✂<small>Cortar</small></button>
+            <button id="btn-borrar" class="btn-ctrl peligro" type="button">🗑<small>Borrar</small></button>
+          </div>
+          <p class="nota">✂ <strong>Cortar</strong> sirve para las esferas: sacá un gajo para ver adentro.</p>
+        </section>
+      </div>
+    </aside>
+  </div>
+
+  <!-- ABAJO: botones principales -->
+  <footer class="barra-inferior">
+    <button id="btn-deshacer" class="btn btn-gris solo-construir" type="button"><span class="ico" aria-hidden="true">↩</span> Deshacer</button>
+    <button id="btn-rehacer" class="btn btn-gris solo-construir" type="button"><span class="ico" aria-hidden="true">↪</span> Rehacer</button>
+    <button id="btn-vista-arriba" class="btn btn-gris" type="button" aria-pressed="false"><span class="ico" aria-hidden="true">⬇</span> Vista desde arriba</button>
+    <button id="btn-nuevo" class="btn btn-gris solo-construir" type="button"><span class="ico" aria-hidden="true">🆕</span> Nuevo proyecto</button>
+    <button id="btn-explorar" class="btn btn-azul solo-construir" type="button"><span class="ico" aria-hidden="true">🧭</span> Explorar</button>
+    <button id="btn-seguir" class="btn btn-naranja solo-explorar" type="button"><span class="ico" aria-hidden="true">🛠</span> Seguir construyendo</button>
+    <button id="btn-autogiro" class="btn btn-gris solo-explorar" type="button" aria-pressed="false"><span class="ico" aria-hidden="true">🔄</span> Gira sola</button>
+    <button id="btn-guardar" class="btn btn-naranja" type="button"><span class="ico" aria-hidden="true">💾</span> Guardar</button>
+    <button id="btn-mostrar" class="btn btn-verde" type="button"><span class="ico" aria-hidden="true">🖼</span> Mostrar mi maqueta</button>
+    <button id="btn-descargar" class="btn btn-azul" type="button"><span class="ico" aria-hidden="true">📷</span> Descargar imagen de mi maqueta</button>
+  </footer>
+</section>
+
+<!-- =====================================================================
+     PANTALLA 5 · VER MAQUETAS GUARDADAS
+     ===================================================================== -->
+<section id="pantalla-maquetas" class="pantalla" aria-labelledby="titulo-maquetas">
+  <header class="barra-superior">
+    <button class="btn btn-gris" type="button" data-ir="menu"><span class="ico" aria-hidden="true">←</span> Menú</button>
+    <h2 id="titulo-maquetas" class="titulo-pantalla" tabindex="-1">🖼 Mis maquetas</h2>
+    <button id="btn-abrir-archivo-galeria" class="btn btn-azul" type="button"><span class="ico" aria-hidden="true">📂</span> Abrir archivo (.json)</button>
+  </header>
+  <div class="contenido">
+    <div id="vacio-maquetas" class="vacio-grande" hidden>
+      <div class="vacio-ico" aria-hidden="true">🫙</div>
+      <p><strong>Todavía no guardaste maquetas.</strong></p>
+      <p>Andá a Construcción, armá tu maqueta y tocá “Guardar”.</p>
+      <button class="btn btn-naranja btn-grande" type="button" data-ir="construir"><span class="ico" aria-hidden="true">🛠</span> Ir a construir</button>
+    </div>
+    <div id="lista-maquetas" class="galeria"></div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     DIÁLOGOS (dentro de la página: no son ventanas emergentes del navegador)
+     ===================================================================== -->
+<div id="capa-dialogo" class="capa" hidden>
+
+  <div id="dlg-confirmar" class="dialogo" role="alertdialog" aria-labelledby="dlg-confirmar-texto" hidden>
+    <p id="dlg-confirmar-texto" class="dialogo-texto"></p>
+    <div class="fila-botones">
+      <button id="dlg-si" class="btn btn-rojo" type="button">Sí</button>
+      <button id="dlg-no" class="btn btn-gris" type="button">No, volver</button>
+    </div>
+  </div>
+
+  <div id="dlg-guardar" class="dialogo dialogo-ancho" role="dialog" aria-labelledby="dlg-guardar-titulo" hidden>
+    <h3 id="dlg-guardar-titulo">💾 Guardar mi maqueta</h3>
+    <label class="campo">Nombre de mi maqueta
+      <input id="guardar-nombre" type="text" maxlength="40" placeholder="Mi maqueta" autocomplete="off">
+    </label>
+    <label class="campo">Mi nombre
+      <input id="guardar-alumno" type="text" maxlength="40" placeholder="Nombre y apellido" autocomplete="off">
+    </label>
+    <div class="opciones-guardar">
+      <button id="gu-local" class="btn btn-verde" type="button"><span class="ico" aria-hidden="true">💾</span> Guardar en esta computadora</button>
+      <button id="gu-png" class="btn btn-azul" type="button"><span class="ico" aria-hidden="true">📷</span> Descargar imagen (4 vistas)</button>
+      <button id="gu-json" class="btn btn-azul" type="button"><span class="ico" aria-hidden="true">📄</span> Descargar archivo 3D (.json)</button>
+      <button id="gu-drive" class="btn btn-naranja" type="button"><span class="ico" aria-hidden="true">☁</span> Enviar a la carpeta de Drive</button>
+      <button id="gu-abrir" class="btn btn-gris" type="button"><span class="ico" aria-hidden="true">📂</span> Abrir archivo (.json)</button>
+    </div>
+    <p id="estado-guardado" class="estado-guardado" role="status" aria-live="polite"></p>
+    <div class="fila-botones"><button id="gu-cerrar" class="btn btn-gris" type="button">Cerrar</button></div>
+  </div>
+</div>
+
+<!-- Mensaje corto de confirmación -->
+<div id="aviso" class="aviso" role="status" aria-live="polite"></div>
+
+<!-- Selector de archivo compartido (abrir .json) -->
+<input id="archivo-json" type="file" accept=".json,application/json" hidden>
+
+<noscript><p class="sin-js">Esta actividad necesita JavaScript. Abrila en Google Chrome.</p></noscript>
+
+<!-- Three.js (biblioteca 3D) por CDN. Si no hay internet, se intenta cargar three.min.js desde esta misma carpeta. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>window.THREE || document.write('<script src="three.min.js"><\/script>');</script>
+<script src="script.js"></script>
+</body>
+</html>
