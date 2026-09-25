@@ -432,14 +432,28 @@
      PANTALLA 4 · MODO 2 (CONSTRUIR) Y MODO 3 (EXPLORAR)
      Comparten el mismo espacio 3D. El atributo data-modo cambia lo visible.
      ===================================================================== -->
-<section id="pantalla-taller" class="pantalla" data-modo="construir" data-tab="elementos" aria-labelledby="titulo-taller">
+<section id="pantalla-taller" class="pantalla" data-modo="construir" data-tab="elementos" aria-label="Taller de construcción 3D">
   <header class="barra-superior barra-taller">
+    <h2 id="titulo-taller" class="sr-solo" tabindex="-1">Taller de construcción 3D</h2>
     <button id="btn-volver-menu" class="btn btn-gris" type="button"><span class="ico" aria-hidden="true">←</span> Menú</button>
-    <h2 id="titulo-taller" class="titulo-pantalla" tabindex="-1">🌍 Capas de la Tierra</h2>
     <span id="etiqueta-modo" class="pildora">🛠 Construir</span>
+
     <div class="pestanas-taller" role="group" aria-label="Paneles">
       <button class="btn btn-chico" type="button" data-tab="elementos" aria-pressed="true">🧱 Formas</button>
       <button class="btn btn-chico" type="button" data-tab="objeto" aria-pressed="false">🎛 Objeto</button>
+    </div>
+
+    <div class="barra-acciones">
+      <button id="btn-deshacer" class="btn btn-gris btn-icono solo-construir" type="button" aria-label="Deshacer"><span class="ico" aria-hidden="true">↩</span></button>
+      <button id="btn-rehacer" class="btn btn-gris btn-icono solo-construir" type="button" aria-label="Rehacer"><span class="ico" aria-hidden="true">↪</span></button>
+      <button id="btn-nuevo" class="btn btn-gris btn-icono solo-construir" type="button" aria-label="Nuevo proyecto"><span class="ico" aria-hidden="true">➕</span></button>
+      <button id="btn-vista-arriba" class="btn btn-gris" type="button" aria-pressed="false"><span class="ico" aria-hidden="true">⬇</span> Vista desde arriba</button>
+      <button id="btn-explorar" class="btn btn-azul solo-construir" type="button"><span class="ico" aria-hidden="true">🧭</span> Explorar</button>
+      <button id="btn-seguir" class="btn btn-naranja solo-explorar" type="button"><span class="ico" aria-hidden="true">🛠</span> Seguir construyendo</button>
+      <button id="btn-autogiro" class="btn btn-gris solo-explorar" type="button" aria-pressed="false"><span class="ico" aria-hidden="true">🔄</span> Gira sola</button>
+      <button id="btn-pantalla-completa" class="btn btn-gris solo-explorar" type="button" aria-pressed="false"><span class="ico" aria-hidden="true">⛶</span> Pantalla completa</button>
+      <button id="btn-guardar" class="btn btn-naranja" type="button"><span class="ico" aria-hidden="true">💾</span> Guardar</button>
+      <button id="btn-descargar" class="btn btn-azul" type="button"><span class="ico" aria-hidden="true">📷</span> Descargar imagen de mi maqueta</button>
     </div>
   </header>
 
@@ -487,15 +501,6 @@
         </div>
       </div>
 
-      <!-- Tarjeta que se ve solo en "Mostrar mi maqueta" -->
-      <div id="tarjeta-presentacion" class="tarjeta-presentacion" hidden>
-        <div>
-          <strong id="pres-nombre">Mi maqueta</strong>
-          <span id="pres-autor"></span>
-          <span id="pres-vista" class="pres-vista"></span>
-        </div>
-        <button id="btn-salir-presentacion" class="btn btn-rojo" type="button">✖ Salir</button>
-      </div>
     </div>
 
     <!-- DERECHA: controles del objeto seleccionado -->
@@ -586,20 +591,6 @@
       </div>
     </aside>
   </div>
-
-  <!-- ABAJO: botones principales -->
-  <footer class="barra-inferior">
-    <button id="btn-deshacer" class="btn btn-gris solo-construir" type="button"><span class="ico" aria-hidden="true">↩</span> Deshacer</button>
-    <button id="btn-rehacer" class="btn btn-gris solo-construir" type="button"><span class="ico" aria-hidden="true">↪</span> Rehacer</button>
-    <button id="btn-vista-arriba" class="btn btn-gris" type="button" aria-pressed="false"><span class="ico" aria-hidden="true">⬇</span> Vista desde arriba</button>
-    <button id="btn-nuevo" class="btn btn-gris solo-construir" type="button"><span class="ico" aria-hidden="true">🆕</span> Nuevo proyecto</button>
-    <button id="btn-explorar" class="btn btn-azul solo-construir" type="button"><span class="ico" aria-hidden="true">🧭</span> Explorar</button>
-    <button id="btn-seguir" class="btn btn-naranja solo-explorar" type="button"><span class="ico" aria-hidden="true">🛠</span> Seguir construyendo</button>
-    <button id="btn-autogiro" class="btn btn-gris solo-explorar" type="button" aria-pressed="false"><span class="ico" aria-hidden="true">🔄</span> Gira sola</button>
-    <button id="btn-guardar" class="btn btn-naranja" type="button"><span class="ico" aria-hidden="true">💾</span> Guardar</button>
-    <button id="btn-mostrar" class="btn btn-verde" type="button"><span class="ico" aria-hidden="true">🖼</span> Mostrar mi maqueta</button>
-    <button id="btn-descargar" class="btn btn-azul" type="button"><span class="ico" aria-hidden="true">📷</span> Descargar imagen de mi maqueta</button>
-  </footer>
 </section>
 
 <!-- =====================================================================
