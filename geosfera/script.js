@@ -106,14 +106,6 @@ const CONFIG = {
     { etiqueta: 'Núcleo interno', color: '#ffe066', textura: 'lisa', diametro: 1.0, dy: 0 }
   ],
 
-  // --- Guion de "Mostrar mi maqueta" (vista, si gira sola, segundos, texto) ---
-  GUION_PRESENTACION: [
-    { vista: 'libre',   gira: true,  seg: 8, texto: 'Vista 3D' },
-    { vista: 'arriba',  gira: false, seg: 4, texto: 'Vista desde arriba' },
-    { vista: 'frontal', gira: false, seg: 4, texto: 'Vista de frente' },
-    { vista: 'lateral', gira: false, seg: 4, texto: 'Vista de costado' }
-  ],
-
   // --- Preguntas del quiz de repaso (Verdadero / Falso) ---
   PREGUNTAS: [
     { texto: 'El agua ocupa aproximadamente el 70 % de la superficie del planeta.', valor: true,
@@ -160,8 +152,7 @@ function nombreArchivo(texto) {
 
 const estado = {
   pantalla: 'inicio',
-  modo: 'construir',       // construir | explorar | presentar
-  modoPrevio: 'construir',
+  modo: 'construir',       // construir | explorar
   vista: 'libre',          // libre | arriba | frontal | lateral
   objetos: [],             // piezas de la maqueta
   seleccion: [],           // ids de las piezas elegidas
@@ -209,7 +200,6 @@ function navegar(destino) {
 }
 
 function salirDelTaller() {
-  pararRecorrido();
   estado.autoGirar = false;
   if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(() => {});
 }
@@ -1201,7 +1191,7 @@ function iniciarTeclado() {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       if (!$('#capa-dialogo').hidden) cerrarDialogo();
-      else if (estado.modo === 'presentar') salirPresentacion();
+      else if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
       return;
     }
     if (estado.pantalla !== 'taller' || estado.modo !== 'construir' || !$('#capa-dialogo').hidden) return;
@@ -1532,7 +1522,7 @@ function dibujarGaleria() {
 
 
 /* =====================================================================
-   12. MODOS: CONSTRUIR, EXPLORAR Y "MOSTRAR MI MAQUETA"
+   12. MODOS: CONSTRUIR Y EXPLORAR
    ===================================================================== */
 
 /** Entra al taller 3D. Si "sinCargar" es true no recupera el autoguardado. */
@@ -1550,9 +1540,9 @@ function establecerModo(modo) {
   $('#etiqueta-modo').textContent = modo === 'explorar' ? '🧭 Explorar' : '🛠 Construir';
   if (modo !== 'construir') deseleccionarSiHay();
   ocultarInfo();
-  pararRecorrido();
   estado.autoGirar = false;
   $('#btn-autogiro').setAttribute('aria-pressed', 'false');
+  if (modo !== 'explorar' && document.fullscreenElement) document.exitFullscreen().catch(() => {});
   setTimeout(redimensionar, 30);
 }
 
@@ -1570,8 +1560,7 @@ function iniciarModos() {
     if (estado.autoGirar) irAVista('libre');
     $('#btn-autogiro').setAttribute('aria-pressed', String(estado.autoGirar));
   });
-  $('#btn-mostrar').addEventListener('click', comenzarPresentacion);
-  $('#btn-salir-presentacion').addEventListener('click', salirPresentacion);
+  $('#btn-pantalla-completa').addEventListener('click', alternarPantallaCompleta);
   $('#btn-descargar').addEventListener('click', descargarImagen);
   $('#btn-deshacer').addEventListener('click', deshacer);
   $('#btn-rehacer').addEventListener('click', rehacer);
@@ -1601,45 +1590,20 @@ function mostrarInfo(o) {
 }
 function ocultarInfo() { $('#info-objeto').hidden = true; }
 
-/* ---- "Mostrar mi maqueta": recorrido automático a pantalla completa ---- */
-let temporizadorRecorrido = null, pasoRecorrido = 0;
-
-function comenzarPresentacion() {
-  if (estado.pantalla !== 'taller' || !asegurar3D()) return;
-  if (!estado.objetos.length) { mostrarAviso('Tu maqueta está vacía. ¡Agregá algo primero!'); return; }
-  cerrarDialogo();
-  estado.modoPrevio = estado.modo === 'presentar' ? 'construir' : estado.modo;
-  establecerModo('presentar');
-  $('#pres-nombre').textContent = estado.nombre;
-  $('#pres-autor').textContent = estado.alumno ? 'por ' + estado.alumno : '';
-  $('#tarjeta-presentacion').hidden = false;
-  const el = document.documentElement;
-  if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
-  setTimeout(() => { redimensionar(); pasoRecorrido = 0; siguientePasoRecorrido(); }, 120);
+/* ---- Pantalla completa (disponible en el modo Explorar) ---- */
+function alternarPantallaCompleta() {
+  const zona = $('#pantalla-taller');
+  if (!document.fullscreenElement) {
+    (zona.requestFullscreen ? zona.requestFullscreen() : Promise.reject()).catch(() => mostrarAviso('Este navegador no permite pantalla completa'));
+  } else {
+    document.exitFullscreen().catch(() => {});
+  }
 }
 
-function siguientePasoRecorrido() {
-  const guion = CONFIG.GUION_PRESENTACION;
-  const paso = guion[pasoRecorrido % guion.length];
-  pasoRecorrido++;
-  irAVista(paso.vista);
-  estado.autoGirar = paso.gira;
-  $('#pres-vista').textContent = paso.texto;
-  temporizadorRecorrido = setTimeout(siguientePasoRecorrido, paso.seg * 1000);
-}
-
-function pararRecorrido() {
-  clearTimeout(temporizadorRecorrido);
-  temporizadorRecorrido = null;
-  const t = $('#tarjeta-presentacion');
-  if (t) t.hidden = true;
-}
-
-function salirPresentacion() {
-  if (estado.modo !== 'presentar') return;
-  if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(() => {});
-  establecerModo(estado.modoPrevio);
-  irAVista('libre');
+function alCambiarPantallaCompleta() {
+  const activa = !!document.fullscreenElement;
+  $('#btn-pantalla-completa').setAttribute('aria-pressed', String(activa));
+  setTimeout(redimensionar, 60);
 }
 
 
@@ -1690,9 +1654,7 @@ function iniciarDialogos() {
   $('#btn-abrir-archivo-galeria').addEventListener('click', () => $('#archivo-json').click());
   $('#archivo-json').addEventListener('change', (e) => { abrirArchivo(e.target.files[0]); e.target.value = ''; });
   $('#capa-dialogo').addEventListener('click', (e) => { if (e.target.id === 'capa-dialogo') cerrarDialogo(); });
-  document.addEventListener('fullscreenchange', () => {
-    if (!document.fullscreenElement && estado.modo === 'presentar') salirPresentacion();
-  });
+  document.addEventListener('fullscreenchange', alCambiarPantallaCompleta);
 }
 
 /** Arranque de la aplicación. */
