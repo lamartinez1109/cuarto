@@ -43,7 +43,7 @@ input,select{font:inherit;font-size:1.3em;padding:.2em .4em;border:3px solid var
 .dv{color:var(--co);padding:4px 4px 4px 14px;border-bottom:5px solid var(--tx)}
 .work{color:var(--tx);text-align:right;padding-right:14px;font-size:.7em;min-width:3em}
 .co{color:var(--ve);padding:4px 14px;min-height:1.4em}
-.co input{width:3.5em}.rs{color:var(--vi);font-weight:700;align-self:center}
+.rs{color:var(--vi);font-weight:700;align-self:center}
 .lin{white-space:nowrap}.paso{font-size:1.2em;min-height:3em}
 .barra{display:flex;height:34px;border-radius:10px;overflow:hidden;background:#e2e8f0;margin:8px 0}
 .barra span{background:var(--vi);border-right:3px solid #fff;color:#fff;font-size:14px;text-align:center}
@@ -67,3 +67,7 @@ dialog{border:0;border-radius:20px;padding:24px;box-shadow:0 8px 30px #0006}
 .cub{opacity:.3}
 .exacto .work{font-size:1em;line-height:1.15}
 .aux{align-self:flex-start;text-align:right;font-size:1.3em;font-weight:700;border:3px dashed var(--tu);border-radius:12px;padding:4px 12px;font-variant-numeric:tabular-nums}
+.sub{display:inline-block;border-bottom:4px solid var(--tx)}
+/* Casillas de la división: texto a la derecha para alinear unidades, decenas y centenas */
+.co input,.work input,.aux input{font:inherit;padding:0;border:0;border-bottom:3px solid var(--az);background:#eef2ff;text-align:right;font-variant-numeric:tabular-nums;border-radius:4px 4px 0 0}
+.co input{width:2ch}.work input{width:5ch}.aux input{width:5ch}
