@@ -69,8 +69,9 @@ function divHTML(n, s) {
 }
 // División tradicional paso a paso (según las láminas de referencia): arco, tapar la última cifra,
 // comparar con la primera cifra del divisor, multiplicar, restar y bajar la cifra siguiente.
-function pasosA(n, d) {
+function pasosA(n, d, mental = false) {
   const ds = String(n).split('').map(Number), c1 = Math.floor(d/10), S = []; let i = 0, cur = ds[0], q = '', l = [], rem;
+  const ln = x => `<span style="padding-right:${ds.length - i - 1}ch">${x}</span>`; // alinea unidades con unidades
   const add = (t, o = {}) => S.push({t, q, l:[...l], g:i+1, tap:false, aux:'', ...o});
   add(`Escribimos ${n} ÷ ${d} en la casita de la división.`, {g:0});
   while (cur < d && i < ds.length-1) { i++; cur = cur*10 + ds[i]; }
@@ -81,13 +82,13 @@ function pasosA(n, d) {
       const top = Math.floor(cur/10); let e = Math.min(9, Math.floor(top/c1));
       add(`Tapamos la última cifra (${cur%10}). Miramos ${top} y la primera cifra del divisor, ${c1}. ¿Qué número multiplicado por ${c1} se acerca a ${top}? Probamos con ${e}.`, {tap:true});
       while (d*e > cur) { add(`${d} × ${e} = ${d*e} se pasa de ${cur}. Probamos con ${e-1}.`, {tap:true}); e--; }
-      l.push(`− ${d*e}`);
+      if (!mental) l.push(ln(`<span class="sub">− ${d*e}</span>`)); // en resta mental no se escribe la resta
       add(`Multiplicamos: ${e} × ${d%10} = ${e*(d%10)} y ${e} × ${c1} decenas = ${e*c1*10}. En total ${d} × ${e} = ${d*e}.`, {aux:`${e} × ${d%10} = ${e*(d%10)}<br>${e} × ${c1}0 = ${e*c1*10}<br>———<br>${d} × ${e} = ${d*e}`});
-      rem = cur - d*e; q += e; l.push(String(rem));
-      add(`Restamos: ${cur} − ${d*e} = ${rem}. Anotamos ${e} en el cociente. ${rem} es menor que ${d}: ¡bien!`);
+      rem = cur - d*e; q += e; l.push(ln(String(rem).padStart(String(cur).length, '0')));
+      add(`${mental ? `Restamos mentalmente ${cur} − ${d*e} y escribimos solo el resultado: ${rem}.` : `Restamos: ${cur} − ${d*e} = ${rem}.`} Anotamos ${e} en el cociente. ${rem} es menor que ${d}: ¡bien!`);
     }
     if (i >= ds.length-1) break;
-    i++; cur = rem*10 + ds[i]; if (l.length) l[l.length-1] = String(cur);
+    i++; cur = rem*10 + ds[i]; if (l.length) l[l.length-1] = ln(String(cur));
     add(`Bajamos la cifra ${ds[i]}: ahora tenemos ${cur}.`);
   }
   const Q = Number(q); q = String(Q);
@@ -177,102 +178,115 @@ function sigT() {
 }
 
 /* ---------- 6. APRENDE A DIVIDIR ---------- */
-const EJA = [[347,26],[3728,25],[156,12],[1250,25]], EJB = [[468,12],[345,15],[1250,25],[9876,32]];
-let A = {vista:'con', e:0, p:0, exp:false}, B = null, eb = 0;
-function nuevoB() { const [n,d] = EJB[eb]; B = {n, d, rem:n, partes:[], l:[], msg:'Elige un múltiplo de ' + d + ' para restar.', fin:false}; }
+const EJA = [[347,26],[3728,25],[156,12],[1250,25]];
+let A = {vista:'con', e:0, p:0, exp:false};
 function vAprende() {
   decir('Avanza a tu ritmo. ¡Puedes volver atrás cuando quieras!');
-  const tabs = [['con','🔤 Conceptos'],['a','➖ Paso a paso'],['b','🧠 Resta mental'],['cmp','⚖️ Comparar']];
+  const tabs = [['con','🔤 Conceptos'],['a','➖ Paso a paso'],['b','🧠 Resta mental']];
   let z = '';
   if (A.vista === 'con') z = `<p><b class="t-n">Dividendo</b>: número que vamos a repartir.<br><b class="t-d">Divisor</b>: número por el que dividimos.<br>
     <b class="t-q">Cociente</b>: resultado de la división.<br><b class="t-r">Resto</b>: cantidad que sobra (siempre menor que el divisor).</p>
     ${tdiv('<span class="t-n">156</span>','<span class="t-d">12</span>','<span class="t-q">13</span>')}
     <p class="paso"><b class="t-n">Dividendo</b> = <b class="t-d">divisor</b> × <b class="t-q">cociente</b> + <b class="t-r">resto</b><br>156 = 12 × 13 + 0</p>`;
-  else if (A.vista === 'a') { const [n,d] = EJA[A.e], S = pasosA(n,d), s = S[A.p];
-    if (A.p === S.length-1 && !E.tutA) { E.tutA = true; persistir(); }
-    z = `<div class="juego exacto">${tdiv(divHTML(n, s), d, s.q, s.l.map(x => `<span style="padding-right:${String(n).length - s.g}ch">${x}</span>`))}${s.aux ? `<div class="aux">${s.aux}</div>` : ''}<div><p class="paso" aria-live="polite"><b>Paso ${A.p+1} de ${S.length}.</b> ${s.t}</p>
+  else if (A.vista === 'a' || A.vista === 'b') { const mt = A.vista === 'b', fl = mt ? 'tutB' : 'tutA', [n,d] = EJA[A.e], S = pasosA(n,d,mt), s = S[A.p];
+    if (A.p === S.length-1 && !E[fl]) { E[fl] = true; persistir(); }
+    z = `<div class="juego exacto">${tdiv(divHTML(n, s), d, s.q, s.l)}${s.aux ? `<div class="aux">${s.aux}</div>` : ''}<div><p class="paso" aria-live="polite"><b>Paso ${A.p+1} de ${S.length}.</b> ${s.t}</p>
       ${A.exp ? `<p class="info">Tapamos la última cifra para comparar solo con la primera cifra del divisor. Si el producto se pasa, probamos con un número menor. Al restar, el resto debe ser menor que ${d}; entonces bajamos la cifra siguiente.</p>` : ''}</div></div>
       <div class="fila"><button data-a="aAnt" ${A.p===0?'disabled':''}>⬅️ Paso anterior</button><button data-a="aSig" ${A.p===S.length-1?'disabled':''}>Siguiente paso ➡️</button>
       <button class="sec" data-a="aExp">💡 Ver explicación</button><button class="sec" data-a="aIni">🔄 Volver a empezar</button><button class="sec" data-a="aOtro">🎲 Probar otro ejemplo</button></div>`; }
-  else if (A.vista === 'b') { if (!B) nuevoB();
-    const ks = [1,2,3,4,5,10,20,30,40,50,100,200].filter(k => k*B.d <= B.rem*2 || k === 1), acum = B.partes.reduce((a,b) => a+b, 0);
-    z = `<p>Estrategia: busca múltiplos de ${B.d}, réstalos y suma las partes del cociente.</p>
-      <div class="juego">${tdiv(B.n, B.d, acum || '', B.l)}<div><p class="paso" aria-live="polite">${B.msg}</p><p>Queda: <b class="t-r">${B.rem}</b> · Cociente: <b class="t-q">${B.partes.length ? B.partes.join(' + ') + ' = ' + acum : '0'}</b></p></div></div>
-      <div class="barra" role="img" aria-label="Partes restadas">${B.partes.map(k => `<span style="width:${k*B.d/B.n*100}%">${k*B.d}</span>`).join('')}</div>
-      ${B.fin ? '' : `<div class="ops">${ks.map(k => `<button class="peq" data-a="bElige" data-v="${k}">${B.d} × ${k} = ${B.d*k}</button>`).join('')}</div>`}
-      <div class="fila"><button class="sec" data-a="bOtro">🎲 Probar otro ejemplo</button><button class="sec" data-a="bIni">🔄 Volver a empezar</button></div>`; }
-  else z = `<div class="rejilla"><div class="card"><h3>➖ Restas sucesivas</h3><p>Permite ver cada resta y entender el algoritmo paso a paso.</p></div>
-    <div class="card"><h3>🧠 Resta mental</h3><p>Usa múltiplos del divisor (×10, ×20…) para llegar más rápido.</p></div></div>
-    <p>Los dos métodos resuelven la división. ¡Elige el que te resulte más cómodo!</p>`;
+  else z = '';
   vista.innerHTML = `<section class="card"><h2>Aprende a dividir</h2><div class="fila">${tabs.map(t => `<button class="peq ${A.vista===t[0]?'sel':''}" aria-pressed="${A.vista===t[0]}" data-a="vA" data-v="${t[0]}">${t[1]}</button>`).join('')}</div>${z}</section>`;
 }
-function elegirB(k) {
-  const prod = k*B.d; if (B.fin) return;
-  if (prod > B.rem) { B.msg = `${B.d} × ${k} = ${prod} se pasa de ${B.rem}. Elige uno más chico.`; return vAprende(); }
-  B.l.push(`${B.rem} − ${prod} = ${B.rem-prod}`); B.rem -= prod; B.partes.push(k);
-  if (B.rem < B.d) { B.fin = true; const s = B.partes.reduce((a,b) => a+b, 0);
-    B.msg = `¡Muy bien! Sumamos ${B.partes.join(' + ')} = ${s}. Entonces ${B.n} ÷ ${B.d} = ${s}, resto ${B.rem}.`; E.tutB = true; persistir(); }
-  else B.msg = `Bien: ${B.d} × ${k} = ${prod}. Todavía podemos restar más.`;
-  vAprende();
-}
-
-/* ---------- 7. PRACTICA ---------- */
-let P = {nivel:1, modo:'ritmo', seg:60, ej:null, usados:new Set(), i:0, ok:0};
+/* ---------- 7. PRACTICA ----------
+   Todos los modos se resuelven paso a paso con la estructura de la división (cifra del cociente, producto, resta, bajar cifra).
+   Método "con restas": se escribe el producto y la resta. Método "sin restas": solo el resultado de la resta. */
+let P = {nivel:1, metodo:'con', modo:'ritmo', seg:60, usados:new Set(), i:0, ok:0}, G = null;
 function vPractica() {
-  clearInterval(timer); decir('Elige un nivel y un modo. ¡Tú decides el ritmo!');
+  clearInterval(timer);
   const nom = ['','2 cifras ÷ 2 cifras','3 cifras ÷ 2 cifras','4 cifras ÷ 2 cifras','Desafíos combinados (exactas y con resto)'];
-  const modos = [['ritmo','🐢 Resuelve a tu ritmo'],['des','🎯 Desafío de 10'],['pistas','💡 División con pistas'],['reloj','⏱️ Contrarreloj (opcional)']];
-  vista.innerHTML = `<section class="card"><h2>Practica divisiones</h2><p>Nivel:</p><div class="fila">${[1,2,3,4].map(n => `<button class="peq ${P.nivel===n?'sel':''}" aria-pressed="${P.nivel===n}" data-a="nivel" data-v="${n}">${n}</button>`).join('')} <span>${nom[P.nivel]}</span></div>
-  <p>Modo:</p><div class="fila">${modos.map(m => `<button class="peq ${P.modo===m[0]?'sel':''}" aria-pressed="${P.modo===m[0]}" data-a="modoP" data-v="${m[0]}">${m[1]}</button>`).join('')}</div>
-  ${P.modo === 'reloj' ? `<label>Segundos por ejercicio <select id="seg">${[30,60,90,120].map(s => `<option ${s===P.seg?'selected':''}>${s}</option>`).join('')}</select></label>` : ''}
+  const grupo = (tit, lista, act, sel) => `<p>${tit}</p><div class="fila">${lista.map(m => `<button class="peq ${sel===m[0]?'sel':''}" aria-pressed="${sel===m[0]}" data-a="${act}" data-v="${m[0]}">${m[1]}</button>`).join('')}</div>`;
+  vista.innerHTML = `<section class="card"><h2>Practica divisiones</h2>
+  ${grupo('Nivel: ' + nom[P.nivel], [1,2,3,4].map(n => [n, n]), 'nivel', P.nivel)}
+  ${grupo('Método:', [['con','➖ Con restas'],['sin','🧠 Sin restas']], 'metodoP', P.metodo)}
+  ${grupo('Modo:', [['ritmo','🐢 Resuelve a tu ritmo'],['des','🎯 Desafío de 10'],['pistas','💡 División con pistas'],['reloj','⏱️ Contrarreloj (opcional)']], 'modoP', P.modo)}
+  ${P.modo === 'reloj' ? `<label>Segundos por ejercicio <select id="seg">${[60,90,120,180].map(s => `<option ${s===P.seg?'selected':''}>${s}</option>`).join('')}</select></label>` : ''}
   <p><button class="grande" data-a="empezarP">¡Empezar!</button></p></section>`;
 }
+const ln = (g, x) => `<span style="padding-right:${String(g.n).length - g.i - 1}ch">${x}</span>`; // alinea la línea con la columna actual
 function nuevoEj() {
+  if (G && !G.fin && P.modo === 'des') return fb('En el desafío, termina este ejercicio (puedes pedir pista o solución).', 'info');
   clearInterval(timer); if (P.modo === 'des' && P.i >= 10) return resumenP();
-  P.ej = {...genEj(P.nivel, P.usados), tries:0, pistas:0, sol:false, hecho:false};
-  const e = P.ej;
-  vista.innerHTML = `<section class="card"><h2>${P.modo==='des' ? `Ejercicio ${P.i+1} de 10` : 'Resuelve la división'} <small>Nivel ${P.nivel}</small> <span id="reloj"></span></h2>
-  <div class="juego">${tdiv(e.n, e.d, '<input id="q" aria-label="Cociente" inputmode="numeric" autocomplete="off">')}
-  <label class="rs">Resto <input id="r" aria-label="Resto" inputmode="numeric" autocomplete="off"></label></div>
-  <p id="fb" role="status"></p><p id="hs"></p>
-  <div class="fila"><button id="ok" data-a="comprobar">Comprobar</button><button class="sec" data-a="pista">💡 Necesito una pista</button>
-  <button class="sec" data-a="solucion">📖 Ver solución explicada</button><button class="sec" data-a="nuevoEj">➡️ Nuevo ejercicio</button>
-  <button class="sec" data-a="ir" data-v="practica">Volver al menú</button></div><div id="sl" class="sol"></div></section>`;
-  $('#q').focus();
-  if (P.modo === 'reloj') { let s = P.seg; const r = $('#reloj'); r.textContent = `⏱️ ${s} s`;
-    timer = setInterval(() => { s--; r.textContent = `⏱️ ${s} s`;
-      if (s <= 0) { clearInterval(timer); r.textContent = ''; fb('⏰ ¡Se acabó el tiempo! No pasa nada: sigue a tu ritmo.', 'info'); } }, 1000); }
+  const e = genEj(P.nivel, P.usados), ds = String(e.n).split('').map(Number); let i = 0, cur = ds[0];
+  while (cur < e.d && i < ds.length-1) { i++; cur = cur*10 + ds[i]; } // primer grupo de cifras >= divisor
+  G = {...e, ds, i, cur, q:'', l:[], fase:'cifra', mental:P.metodo === 'sin', err:0, pistas:0, hp:0, sol:false, fin:false, k:0, rem:0, num:P.i+1, t:P.seg};
+  pintarG();
+  if (P.modo === 'reloj') timer = setInterval(() => { G.t--; const r = $('#reloj'); if (r) r.textContent = G.t > 0 ? `⏱️ ${G.t} s` : '';
+    if (G.t <= 0) { clearInterval(timer); fb('⏰ ¡Se acabó el tiempo! No pasa nada: sigue a tu ritmo.', 'info'); } }, 1000);
 }
-function comprobar() {
-  const e = P.ej; if (!e || e.hecho) return;
-  const qs = $('#q').value.trim(), rs = $('#r').value.trim();
-  if (!/^\d+$/.test(qs) || !/^\d+$/.test(rs)) return fb('Escribe el cociente y el resto con números enteros. Si no sobra nada, el resto es 0.', 'info');
-  const q = +qs, r = +rs;
-  if (q === e.q && r === e.r && e.n === e.d*q + r && r < e.d) { // respuesta correcta
-    e.hecho = true; const est = e.sol ? 1 : e.pistas ? 2 : e.tries === 0 ? 3 : 2; E.estrellas += est;
-    E.hechos++; E.aciertos++; if (e.n >= 1000) E.d4++; else if (e.n >= 100) E.d3++; if (e.r > 0) E.resto++;
-    if (e.tries === 0 && !e.pistas && !e.sol) { E.racha++; E.mejorRacha = Math.max(E.mejorRacha, E.racha); if (P.modo === 'des') P.ok++; } else E.racha = 0;
-    if (P.modo === 'des') P.i++;
-    clearInterval(timer); fb(`¡Excelente! Tu división está correcta. Ganaste ${est} ⭐ (${e.d} × ${q} + ${r} = ${e.n})`, 'ok'); persistir(); return; }
-  e.tries++; E.errores++; E.racha = 0;
-  fb(r >= e.d ? `El resto debe ser menor que el divisor (${e.d}). ¿Cabe una vez más?`
-    : q === e.q ? '¡Casi lo tienes! El cociente está bien, revisa el resto.'
-    : e.d*q > e.n ? `¡Buen intento! ${e.d} × ${q} se pasa de ${e.n}. Prueba con un cociente más chico.`
-    : '¡Casi lo tienes! Revisa cuántas veces cabe el divisor. Si quieres, pide una pista.', 'mal'); persistir();
+function pintarG() {
+  const g = G, ent = '<input id="gin" aria-label="Tu respuesta" inputmode="numeric" autocomplete="off">';
+  const lin = [...g.l]; if (g.fase === 'resta') lin.push(ln(g, ent));
+  const co = g.q + (g.fase === 'cifra' ? ent : '');
+  const preg = {cifra:`¿Cuántas veces cabe ${g.d} en ${g.cur}? Escribe la cifra en el cociente.`, prod:`Multiplica ${g.d} × ${g.k} y escribe el producto en el cálculo auxiliar.`,
+    resta:g.mental ? `Calcula en tu cabeza ${g.cur} − ${g.d} × ${g.k} y escribe solo el resultado.` : `Resta ${g.cur} − ${g.d*g.k} y escribe el resultado.`,
+    bajar:'¡Bien! Ahora baja la cifra siguiente.'}[g.fase];
+  const aux = !g.mental && !g.fin && ['prod','resta','bajar'].includes(g.fase) ? `<div class="aux">${g.d}<br>× ${g.k}<br>———<br>${g.fase === 'prod' ? ent : g.d*g.k}</div>` : '';
+  vista.innerHTML = `<section class="card"><h2>${P.modo === 'des' ? `Ejercicio ${g.num} de 10` : 'Resuelve la división'} <small>${g.mental ? 'Sin restas' : 'Con restas'} · Nivel ${P.nivel}</small> <span id="reloj">${P.modo === 'reloj' && g.t > 0 && !g.fin ? `⏱️ ${g.t} s` : ''}</span></h2>
+  <div class="juego exacto">${tdiv(divHTML(g.n, {g:g.i+1, tap:g.fase === 'cifra'}), g.d, co, lin)}${aux}
+  <div><p class="paso" aria-live="polite">${g.fin ? `El resultado es ${+g.q} y el resto es ${g.rem}.` : preg}</p>
+  ${g.fin ? '' : g.fase === 'bajar' ? `<button id="ok" data-a="gBajar">⬇️ Bajar la cifra ${g.ds[g.i+1]}</button>` : '<button id="ok" data-a="gOk">Comprobar</button>'}
+  <p id="fb" role="status"></p><p id="hs"></p></div></div>
+  <div class="fila"><button class="sec" data-a="gPista">💡 Necesito una pista</button><button class="sec" data-a="gSol">📖 Ver solución explicada</button>
+  <button class="sec" data-a="nuevoEj">➡️ Nuevo ejercicio</button><button class="sec" data-a="ir" data-v="practica">Volver al menú</button></div><div id="sl" class="sol"></div></section>`;
+  const x = $('#gin'); if (x) x.focus();
 }
-function pista() {
-  const e = P.ej; if (!e || e.hecho) return; e.pistas++; const m = Math.floor(e.q/10)*10;
-  const H = ['Pista: busca un múltiplo del divisor que se acerque al dividendo sin pasarse.', `El cociente está entre ${m} y ${m+10}.`,
-    `Prueba: ${e.d} × ${e.q} = ${e.d*e.q}. ¿Cuánto falta para llegar a ${e.n}?`], n = Math.min(e.pistas, 3);
-  $('#hs').innerHTML = '💡 ' + (P.modo === 'pistas' ? H.slice(0,n).join('<br>💡 ') : H[n-1]);
+function contarHecho(e, limpio) { // suma estadísticas y rachas de un ejercicio resuelto (una sola vez)
+  E.hechos++; E.aciertos++; if (e.n >= 1000) E.d4++; else if (e.n >= 100) E.d3++; if (e.r > 0) E.resto++;
+  if (limpio) { E.racha++; E.mejorRacha = Math.max(E.mejorRacha, E.racha); } else E.racha = 0;
 }
-function solucion() {
-  const e = P.ej; if (!e) return; e.sol = true;
-  $('#sl').innerHTML = '<ol>' + pasosA(e.n, e.d).map(s => `<li>${s.t}</li>`).join('') + `</ol><p><b>Comprobación:</b> ${e.d} × ${e.q} + ${e.r} = ${e.n} y ${e.r} es menor que ${e.d}.</p>`;
-  if (!e.hecho) fb('¡Buen intento! Vamos a resolverlo juntos. Ahora inténtalo tú (ganarás 1 ⭐).', 'info');
+function gPista() {
+  const g = G; if (g.fin) return; g.pistas++; g.hp++; const k = Math.floor(g.cur / g.d);
+  const H = {cifra:[`Tapa la última cifra de ${g.cur}: queda ${Math.floor(g.cur/10)}. Compáralo con la primera cifra del divisor (${Math.floor(g.d/10)}).`,
+      `La cifra está entre ${Math.max(0, k-1)} y ${k+1}. Si el producto se pasa de ${g.cur}, prueba con una menor.`, `Prueba con ${k}: ${g.d} × ${k} = ${g.d*k}, y no se pasa de ${g.cur}.`],
+    prod:[`Multiplica ${g.k} × ${g.d%10} (unidades) y ${g.k} × ${Math.floor(g.d/10)} decenas, y suma.`, `${g.k} × ${g.d%10} = ${g.k*(g.d%10)}`, `${g.d} × ${g.k} = ${g.d*g.k}`],
+    resta:[`Piensa en ${g.d} × ${g.k} y cuenta cuánto falta para llegar a ${g.cur}.`, `El resultado debe ser menor que ${g.d}.`, `${g.cur} − ${g.d*g.k} = ${g.cur - g.d*g.k}`],
+    bajar:Array(3).fill('Baja la cifra siguiente del dividendo.')}[g.fase];
+  $('#hs').textContent = '💡 ' + H[Math.min(g.hp, 3) - 1];
+}
+function gError(t) { G.err++; E.errores++; E.racha = 0; persistir(); fb(t, 'mal'); if (P.modo === 'pistas') gPista(); }
+function gOk() {
+  const g = G; if (g.fin || g.fase === 'bajar') return;
+  const s = $('#gin').value.trim(); if (!/^\d+$/.test(s)) return fb('Escribe un número entero.', 'info');
+  const v = +s;
+  if (g.fase === 'cifra') {
+    if (v !== Math.floor(g.cur / g.d)) return gError(v*g.d > g.cur ? `¡Casi! ${g.d} × ${v} = ${g.d*v} se pasa de ${g.cur}. Prueba con una cifra menor.` : '¡Buen intento! Todavía cabe más veces. Prueba con una cifra mayor.');
+    g.k = v; g.q += v; g.fase = g.mental ? 'resta' : 'prod';
+  } else if (g.fase === 'prod') {
+    if (v !== g.d*g.k) return gError(`Revisa la multiplicación ${g.d} × ${g.k}: multiplica por las unidades y por las decenas.`);
+    g.l.push(ln(g, `<span class="sub">− ${v}</span>`)); g.fase = 'resta';
+  } else {
+    const rem = g.cur - g.d*g.k;
+    if (v !== rem) return gError(`¡Casi lo tienes! Revisa la resta. El resultado debe ser menor que ${g.d}.`);
+    g.rem = rem; g.l.push(ln(g, String(rem).padStart(String(g.cur).length, '0'))); g.fase = 'bajar';
+    if (g.i >= g.ds.length-1) { // terminó la división: recompensa una sola vez
+      g.fin = true; clearInterval(timer); const limpio = !g.err && !g.pistas && !g.sol, est = g.sol ? 1 : limpio ? 3 : 2;
+      E.estrellas += est; contarHecho(g, limpio); if (P.modo === 'des') { P.i++; if (limpio) P.ok++; } persistir(); pintarG();
+      return fb(`¡Excelente! Tu división está correcta: ${g.d} × ${+g.q} + ${g.rem} = ${g.n}. Ganaste ${est} ⭐`, 'ok');
+    }
+  }
+  g.hp = 0; pintarG(); fb('¡Muy bien!', 'ok');
+}
+function gBajar() {
+  const g = G; if (g.fin || g.fase !== 'bajar') return;
+  g.i++; g.cur = g.rem*10 + g.ds[g.i]; g.l[g.l.length-1] = ln(g, String(g.cur)); g.fase = 'cifra'; g.hp = 0; pintarG();
+}
+function gSol() {
+  const g = G; g.sol = true;
+  $('#sl').innerHTML = '<ol>' + pasosA(g.n, g.d, g.mental).map(s => `<li>${s.t}</li>`).join('') + `</ol><p><b>Comprobación:</b> ${g.d} × ${Math.floor(g.n/g.d)} + ${g.r} = ${g.n}.</p>`;
+  if (!g.fin) fb('¡Buen intento! Vamos a resolverlo juntos. Sigue los pasos (ganarás 1 ⭐).', 'info');
 }
 function resumenP() {
-  vista.innerHTML = `<section class="card"><h2>¡Desafío terminado! 🎉</h2><p class="preg">Resolviste ${P.ok} de 10 al primer intento.</p>
+  vista.innerHTML = `<section class="card"><h2>¡Desafío terminado! 🎉</h2><p class="preg">Resolviste ${P.ok} de 10 sin errores ni pistas.</p>
   <div class="fila"><button data-a="empezarP">Otro desafío</button><button class="sec" data-a="ir" data-v="practica">Volver al menú</button></div></section>`;
 }
 
@@ -298,15 +312,13 @@ const acc = {
   tabla:v => { T.tabla = +v; T.q = null; vTablas(T.n); },
   modoT:v => { T.modo = v; T.q = null; T.i = 0; T.ok = 0; vTablas(T.n); },
   rT:respTabla, sigT,
-  vA:v => { A.vista = v; if (v === 'b') B = null; vAprende(); },
+  vA:v => { A.vista = v; A.p = 0; vAprende(); },
   aAnt:() => { A.p = Math.max(0, A.p-1); vAprende(); }, aSig:() => { A.p++; vAprende(); },
   aExp:() => { A.exp = !A.exp; vAprende(); }, aIni:() => { A.p = 0; vAprende(); },
   aOtro:() => { A.e = (A.e+1) % EJA.length; A.p = 0; vAprende(); },
-  bElige:v => elegirB(+v), bIni:() => { nuevoB(); vAprende(); }, bOtro:() => { eb = (eb+1) % EJB.length; nuevoB(); vAprende(); },
-  nivel:v => { P.nivel = +v; vPractica(); }, modoP:v => { P.modo = v; vPractica(); },
-  empezarP:() => { const s = $('#seg'); if (s) P.seg = +s.value; P.usados = new Set(); P.i = 0; P.ok = 0; nuevoEj(); },
-  comprobar, pista, solucion,
-  nuevoEj:() => { if (P.modo === 'des' && P.ej && !P.ej.hecho) fb('En el desafío, primero resuelve este ejercicio (puedes pedir pista o solución).', 'info'); else nuevoEj(); },
+  nivel:v => { P.nivel = +v; vPractica(); }, modoP:v => { P.modo = v; vPractica(); }, metodoP:v => { P.metodo = v; vPractica(); },
+  empezarP:() => { const s = $('#seg'); if (s) P.seg = +s.value; P.usados = new Set(); P.i = 0; P.ok = 0; G = null; nuevoEj(); },
+  gOk, gBajar, gPista, gSol, nuevoEj,
   verIns:id => { const i = INS.find(x => x.id === id), [p,m] = i.p(E);
     $('#det').innerHTML = `<b>${i.i} ${i.n}</b>: ${i.d} Progreso: ${p}/${m} <progress max="${m}" value="${p}"></progress>`; },
   reset:() => $('#dlg').showModal(), noReset:() => $('#dlg').close(),
