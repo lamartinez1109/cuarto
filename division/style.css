@@ -1,0 +1,69 @@
+/* ===== Colores (editar aquí para cambiar la paleta) ===== */
+:root{--az:#2563eb;--tu:#0f766e;--co:#c2410c;--vi:#6d28d9;--ve:#15803d;--am:#fbbf24;--tx:#1e293b;--card:#fff}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{font:clamp(18px,1.4vw,20px)/1.4 system-ui,Verdana,Arial,sans-serif;color:var(--tx);
+  background:linear-gradient(135deg,#e0f2fe,#fef9c3);overflow:hidden;
+  display:grid;grid-template-columns:clamp(150px,15vw,200px) 1fr;grid-template-rows:auto 1fr}
+header{grid-column:1/-1;display:flex;align-items:center;gap:14px;padding:6px 16px;background:#fff;box-shadow:0 2px 8px #0002}
+h1{font-size:clamp(20px,2vw,28px);margin:0;flex:1;color:var(--vi)}
+h2{margin:.2em 0;color:var(--az);font-size:clamp(24px,2.2vw,32px)}
+.prog{position:relative;width:min(240px,25vw);height:26px;background:#e2e8f0;border-radius:13px;overflow:hidden}
+#barra{height:100%;width:0;background:var(--ve);transition:width .5s}
+#pct{position:absolute;inset:0;text-align:center;font-weight:700;font-size:16px;line-height:26px}
+.estr{font-weight:700;font-size:22px}
+button{font:inherit;font-weight:700;padding:.4em 1em;border:0;border-radius:14px;background:var(--az);color:#fff;
+  cursor:pointer;min-height:44px;box-shadow:0 3px 0 #0003}
+button.sec{background:var(--tu)} button.peq{padding:.3em .8em;background:#e0e7ff;color:var(--tx)}
+button.peq.sel{background:var(--vi);color:#fff} button.grande{font-size:1.4em;background:var(--co);padding:.5em 1.4em}
+button:disabled{opacity:.5;cursor:not-allowed}
+:focus-visible{outline:4px solid #f59e0b;outline-offset:2px}
+nav{display:flex;flex-direction:column;gap:8px;padding:10px;overflow:auto}
+nav button{text-align:left;background:#fff;color:var(--tx);font-size:.95em}
+nav button[aria-current=page]{background:var(--vi);color:#fff}
+main{padding:10px 14px;overflow:auto;animation:ent .4s}
+.card{background:var(--card);border-radius:22px;padding:14px 20px;box-shadow:0 4px 14px #0002}
+.fila{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0;align-items:center}
+.rejilla{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:12px}
+.rejilla button{background:var(--tu);padding:14px}
+.portada .sub{font-size:1.2em}
+.ins{font-size:30px;margin:2px}.off{opacity:.3;filter:grayscale(1)}
+.tabla{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;font-size:1.3em}
+.tabla div{background:#eef2ff;border-radius:10px;padding:4px 12px}
+.preg{font-size:1.8em;font-weight:700;margin:.3em 0}
+.ops{display:flex;gap:10px;flex-wrap:wrap}.ops button{font-size:1.4em;min-width:130px}
+input,select{font:inherit;font-size:1.3em;padding:.2em .4em;border:3px solid var(--az);border-radius:10px;width:6.5em}
+#fb,#hs{min-height:1.6em;margin:.3em 0;font-weight:700}
+.ok::before{content:"✅ "}.ok{color:var(--ve)}.mal::before{content:"💬 "}.mal{color:var(--co)}.info::before{content:"ℹ️ "}.info{color:var(--az)}
+.est{font-size:.9em}
+/* División tradicional: dividendo | divisor, cociente debajo del divisor */
+.juego{display:flex;align-items:flex-start;gap:24px;flex-wrap:wrap}
+.tdiv{display:grid;grid-template-columns:auto auto;font-size:clamp(30px,3.4vw,46px);font-weight:700;font-variant-numeric:tabular-nums}
+.dd{color:var(--az);padding:4px 14px 4px 4px;border-right:5px solid var(--tx);text-align:right}
+.dv{color:var(--co);padding:4px 4px 4px 14px;border-bottom:5px solid var(--tx)}
+.work{color:var(--tx);text-align:right;padding-right:14px;font-size:.7em;min-width:3em}
+.co{color:var(--ve);padding:4px 14px;min-height:1.4em}
+.co input{width:3.5em}.rs{color:var(--vi);font-weight:700;align-self:center}
+.lin{white-space:nowrap}.paso{font-size:1.2em;min-height:3em}
+.barra{display:flex;height:34px;border-radius:10px;overflow:hidden;background:#e2e8f0;margin:8px 0}
+.barra span{background:var(--vi);border-right:3px solid #fff;color:#fff;font-size:14px;text-align:center}
+.t-n{color:var(--az)}.t-d{color:var(--co)}.t-q{color:var(--ve)}.t-r{color:var(--vi)}
+.sol{max-height:150px;overflow:auto;background:#f8fafc;border-radius:12px;padding:0 12px}
+.insb{display:flex;flex-direction:column;align-items:center;background:#fff!important;color:var(--tx);border:3px solid var(--am)}
+.insb .ico{font-size:40px}.insb.off{border-color:#cbd5e1}.insb small{font-weight:400}
+progress{width:200px;height:18px;vertical-align:middle}
+dialog{border:0;border-radius:20px;padding:24px;box-shadow:0 8px 30px #0006}
+#aviso{position:fixed;right:16px;bottom:16px;max-width:380px;background:#fff;border:4px solid var(--am);border-radius:16px;padding:8px 14px;box-shadow:0 4px 14px #0004;z-index:9;animation:ent .4s}
+#aviso p{margin:4px 0}
+@keyframes ent{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes bote{50%{transform:translateY(-6px)}}
+.calmado *,.calmado{animation:none!important;transition:none!important}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:900px){body{grid-template-columns:1fr;grid-template-rows:auto auto 1fr;overflow:auto}
+  nav{flex-direction:row;flex-wrap:wrap}aside{display:none}main{overflow:visible}}
+
+/* Arco sobre el grupo de cifras, cifra tapada y multiplicación auxiliar */
+.arco{display:inline-block;border-top:4px solid var(--vi);border-radius:50% 50% 0 0/10px 10px 0 0;padding-top:2px}
+.cub{opacity:.3}
+.exacto .work{font-size:1em;line-height:1.15}
+.aux{align-self:flex-start;text-align:right;font-size:1.3em;font-weight:700;border:3px dashed var(--tu);border-radius:12px;padding:4px 12px;font-variant-numeric:tabular-nums}

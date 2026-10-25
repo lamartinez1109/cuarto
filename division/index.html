@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La aventura de las divisiones</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- Barra superior: nombre, progreso, estrellas, inicio y ajustes -->
+<header>
+  <h1>🧮 La aventura de las divisiones</h1>
+  <div class="prog" role="progressbar" aria-label="Progreso general" aria-valuemin="0" aria-valuemax="100" id="pb">
+    <div id="barra"></div><span id="pct">0%</span>
+  </div>
+  <span id="estr" class="estr" aria-label="Estrellas">⭐ 0</span>
+  <button data-a="ir" data-v="inicio">🏠 Inicio</button>
+</header>
+<!-- Menú lateral (se genera en script.js) -->
+<nav id="menu" aria-label="Secciones"></nav>
+<!-- Área central: cada sección se dibuja aquí -->
+<main id="vista" tabindex="-1"></main>
+<!-- Avisos que se cierran con botón (no desaparecen solos) -->
+<div id="aviso" hidden></div>
+<!-- Diálogo accesible para reiniciar el progreso -->
+<dialog id="dlg" aria-labelledby="dt">
+  <h2 id="dt">¿Reiniciar el progreso?</h2>
+  <p>Se borrarán tus estrellas, insignias y resultados. No se puede deshacer.</p>
+  <div class="fila">
+    <button data-a="noReset">Cancelar</button>
+    <button class="sec" data-a="siReset">Sí, borrar todo</button>
+  </div>
+</dialog>
+<script src="script.js"></script>
+</body>
+</html>
