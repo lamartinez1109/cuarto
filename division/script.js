@@ -52,9 +52,9 @@ function persistir() { revisarInsignias(); guardar(); actualizarTop(); }
 
 /* ---------- 3. MATEMÁTICA ---------- */
 function genEj(nv, usados) { // genera división válida: divisor 10-99, dividendo ≤ 4 cifras, sin repetir
-  const [a0, b0] = {1:[10,99],2:[100,999],3:[1000,9999],4:[10,9999]}[nv];
+  const [a0, b0] = {0:[10,999],1:[10,99],2:[100,999],3:[1000,9999],4:[10,9999]}[nv];
   for (let t = 0; t < 500; t++) {
-    const d = rnd(10, 99), exacto = Math.random() < (nv === 4 ? .5 : .3); let n;
+    const d = nv === 0 ? rnd(2, 9) : rnd(10, 99), exacto = Math.random() < (nv === 4 ? .5 : .3); let n;
     if (exacto) { const a = Math.ceil(Math.max(a0, d)/d), b = Math.floor(b0/d); if (a > b) continue; n = d*rnd(a, b); }
     else { n = rnd(Math.max(a0, d), b0); if (n % d === 0) continue; }
     const k = n+'/'+d; if (usados.has(k)) continue; usados.add(k);
@@ -79,11 +79,11 @@ function pasosA(n, d, mental = false) {
   for (;;) {
     if (cur < d) { add(`${cur} es menor que ${d}: no cabe. Escribimos 0 en el cociente.`); q += '0'; rem = cur; }
     else {
-      const top = Math.floor(cur/10); let e = Math.min(9, Math.floor(top/c1));
-      add(`Tapamos la última cifra (${cur%10}). Miramos ${top} y la primera cifra del divisor, ${c1}. ¿Qué número multiplicado por ${c1} se acerca a ${top}? Probamos con ${e}.`, {tap:true});
+      const top = Math.floor(cur/10); let e = d < 10 ? Math.floor(cur/d) : Math.min(9, Math.floor(top/c1));
+      add(d < 10 ? `Tomamos ${cur}. ¿Cuántas veces cabe ${d} en ${cur}? Cabe ${e} ${e === 1 ? 'vez' : 'veces'}.` : `Tapamos la última cifra (${cur%10}). Miramos ${top} y la primera cifra del divisor, ${c1}. ¿Qué número multiplicado por ${c1} se acerca a ${top}? Probamos con ${e}.`, {tap:d >= 10});
       while (d*e > cur) { add(`${d} × ${e} = ${d*e} se pasa de ${cur}. Probamos con ${e-1}.`, {tap:true}); e--; }
       if (!mental) l.push(ln(`<span class="sub">− ${d*e}</span>`)); // en resta mental no se escribe la resta
-      add(`Multiplicamos: ${e} × ${d%10} = ${e*(d%10)} y ${e} × ${c1} decenas = ${e*c1*10}. En total ${d} × ${e} = ${d*e}.`, {aux:`${e} × ${d%10} = ${e*(d%10)}<br>${e} × ${c1}0 = ${e*c1*10}<br>———<br>${d} × ${e} = ${d*e}`});
+      add(d < 10 ? `Multiplicamos: ${d} × ${e} = ${d*e}.` : `Multiplicamos: ${e} × ${d%10} = ${e*(d%10)} y ${e} × ${c1} decenas = ${e*c1*10}. En total ${d} × ${e} = ${d*e}.`, {aux:d < 10 ? `${d} × ${e} = ${d*e}` : `${e} × ${d%10} = ${e*(d%10)}<br>${e} × ${c1}0 = ${e*c1*10}<br>———<br>${d} × ${e} = ${d*e}`});
       rem = cur - d*e; q += e; l.push(ln(String(rem).padStart(String(cur).length, '0')));
       add(`${mental ? `Restamos mentalmente ${cur} − ${d*e} y escribimos solo el resultado: ${rem}.` : `Restamos: ${cur} − ${d*e} = ${rem}.`} Anotamos ${e} en el cociente. ${rem} es menor que ${d}: ¡bien!`);
     }
@@ -203,10 +203,10 @@ function vAprende() {
 let P = {nivel:1, metodo:'con', modo:'ritmo', seg:60, usados:new Set(), i:0, ok:0}, G = null;
 function vPractica() {
   clearInterval(timer);
-  const nom = ['','2 cifras ÷ 2 cifras','3 cifras ÷ 2 cifras','4 cifras ÷ 2 cifras','Desafíos combinados (exactas y con resto)'];
+  const nom = ['Divisor de 1 cifra: dividendos de 2 y 3 cifras','2 cifras ÷ 2 cifras','3 cifras ÷ 2 cifras','4 cifras ÷ 2 cifras','Desafíos combinados (exactas y con resto)'];
   const grupo = (tit, lista, act, sel) => `<p>${tit}</p><div class="fila">${lista.map(m => `<button class="peq ${sel===m[0]?'sel':''}" aria-pressed="${sel===m[0]}" data-a="${act}" data-v="${m[0]}">${m[1]}</button>`).join('')}</div>`;
   vista.innerHTML = `<section class="card"><h2>Practica divisiones</h2>
-  ${grupo('Nivel: ' + nom[P.nivel], [1,2,3,4].map(n => [n, n]), 'nivel', P.nivel)}
+  ${grupo('Nivel: ' + nom[P.nivel], [[0,'⭐ ÷ 1 cifra'],[1,'1'],[2,'2'],[3,'3'],[4,'4']], 'nivel', P.nivel)}
   ${grupo('Método:', [['con','➖ Con restas'],['sin','🧠 Sin restas']], 'metodoP', P.metodo)}
   ${grupo('Modo:', [['ritmo','🐢 Resuelve a tu ritmo'],['des','🎯 Desafío de 10'],['pistas','💡 División con pistas'],['reloj','⏱️ Contrarreloj (opcional)']], 'modoP', P.modo)}
   ${P.modo === 'reloj' ? `<label>Segundos por ejercicio <select id="seg">${[60,90,120,180].map(s => `<option ${s===P.seg?'selected':''}>${s}</option>`).join('')}</select></label>` : ''}
@@ -232,7 +232,7 @@ function pintarG() {
     bajar:'¡Bien! Ahora baja la cifra siguiente.'}[g.fase];
   const aux = !g.mental && !g.fin && ['prod','resta','bajar'].includes(g.fase) ? `<div class="aux">${g.d}<br>× ${g.k}<br>———<br>${g.fase === 'prod' ? ent : g.d*g.k}</div>` : '';
   vista.innerHTML = `<section class="card"><h2>${P.modo === 'des' ? `Ejercicio ${g.num} de 10` : 'Resuelve la división'} <small>${g.mental ? 'Sin restas' : 'Con restas'} · Nivel ${P.nivel}</small> <span id="reloj">${P.modo === 'reloj' && g.t > 0 && !g.fin ? `⏱️ ${g.t} s` : ''}</span></h2>
-  <div class="juego exacto">${tdiv(divHTML(g.n, {g:g.i+1, tap:g.fase === 'cifra'}), g.d, co, lin)}${aux}
+  <div class="juego exacto">${tdiv(divHTML(g.n, {g:g.i+1, tap:g.fase === 'cifra' && g.d >= 10}), g.d, co, lin)}${aux}
   <div><p class="paso" aria-live="polite">${g.fin ? `El resultado es ${+g.q} y el resto es ${g.rem}.` : preg}</p>
   ${g.fin ? '' : g.fase === 'bajar' ? `<button id="ok" data-a="gBajar">⬇️ Bajar la cifra ${g.ds[g.i+1]}</button>` : '<button id="ok" data-a="gOk">Comprobar</button>'}
   <p id="fb" role="status"></p><p id="hs"></p></div></div>
@@ -241,14 +241,14 @@ function pintarG() {
   const x = $('#gin'); if (x) x.focus();
 }
 function contarHecho(e, limpio) { // suma estadísticas y rachas de un ejercicio resuelto (una sola vez)
-  E.hechos++; E.aciertos++; if (e.n >= 1000) E.d4++; else if (e.n >= 100) E.d3++; if (e.r > 0) E.resto++;
+  E.hechos++; E.aciertos++; if (e.d >= 10) { if (e.n >= 1000) E.d4++; else if (e.n >= 100) E.d3++; } if (e.r > 0) E.resto++;
   if (limpio) { E.racha++; E.mejorRacha = Math.max(E.mejorRacha, E.racha); } else E.racha = 0;
 }
 function gPista() {
   const g = G; if (g.fin) return; g.pistas++; g.hp++; const k = Math.floor(g.cur / g.d);
-  const H = {cifra:[`Tapa la última cifra de ${g.cur}: queda ${Math.floor(g.cur/10)}. Compáralo con la primera cifra del divisor (${Math.floor(g.d/10)}).`,
+  const H = {cifra:[g.d < 10 ? `Piensa en la tabla del ${g.d}: ¿qué número por ${g.d} se acerca a ${g.cur} sin pasarse?` : `Tapa la última cifra de ${g.cur}: queda ${Math.floor(g.cur/10)}. Compáralo con la primera cifra del divisor (${Math.floor(g.d/10)}).`,
       `La cifra está entre ${Math.max(0, k-1)} y ${k+1}. Si el producto se pasa de ${g.cur}, prueba con una menor.`, `Prueba con ${k}: ${g.d} × ${k} = ${g.d*k}, y no se pasa de ${g.cur}.`],
-    prod:[`Multiplica ${g.k} × ${g.d%10} (unidades) y ${g.k} × ${Math.floor(g.d/10)} decenas, y suma.`, `${g.k} × ${g.d%10} = ${g.k*(g.d%10)}`, `${g.d} × ${g.k} = ${g.d*g.k}`],
+    prod:[g.d < 10 ? `Usa la tabla del ${g.d}.` : `Multiplica ${g.k} × ${g.d%10} (unidades) y ${g.k} × ${Math.floor(g.d/10)} decenas, y suma.`, g.d < 10 ? `${g.d} × ${g.k}` : `${g.k} × ${g.d%10} = ${g.k*(g.d%10)}`, `${g.d} × ${g.k} = ${g.d*g.k}`],
     resta:[`Piensa en ${g.d} × ${g.k} y cuenta cuánto falta para llegar a ${g.cur}.`, `El resultado debe ser menor que ${g.d}.`, `${g.cur} − ${g.d*g.k} = ${g.cur - g.d*g.k}`],
     bajar:Array(3).fill('Baja la cifra siguiente del dividendo.')}[g.fase];
   $('#hs').textContent = '💡 ' + H[Math.min(g.hp, 3) - 1];
